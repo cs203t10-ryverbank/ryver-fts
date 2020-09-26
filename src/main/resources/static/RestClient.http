@@ -1,0 +1,36 @@
+###
+GET http://localhost:8081/
+
+###
+POST http://localhost:8081/login
+Accept: application/json
+
+{
+    "username": "manager_1",
+    "password": "01_manager_01"
+}
+
+###
+POST http://localhost:8081/login
+Accept: application/json
+
+{
+    "username": "analyst_1",
+    "password": "01_analyst_01"
+}
+
+###
+GET http://localhost:8081/users
+Accept: application/json
+
+###
+GET http://localhost:8081/users
+Accept: application/json
+# Token generated with manager account.
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5Njc1Nzh9.IfQ-gfBCyGeR4e0ScrUfIYMXHI2OvGdAyEEmU5Or0cbUUK8UcPYIZs7XX0fqB0_cdI8tqyL_-4CVj-PxzSryzw
+
+###
+GET http://localhost:8081/users
+Accept: application/json
+# Token generated with analyst account.
+Authorization: Bearer ...
