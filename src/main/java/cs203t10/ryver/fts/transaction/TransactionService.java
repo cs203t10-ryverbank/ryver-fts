@@ -15,6 +15,7 @@ public class TransactionService {
   }
 
   public Transaction addTransaction(Transaction transaction) {
+    // Acccess account service to update bank balances.
     return transactionRepository.save(transaction);
   }
 
