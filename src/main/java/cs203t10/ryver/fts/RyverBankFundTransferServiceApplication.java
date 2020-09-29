@@ -15,10 +15,4 @@ public class RyverBankFundTransferServiceApplication {
 		SpringApplication.run(RyverBankFundTransferServiceApplication.class, args);
 	}
 
-    @GetMapping("/")
-    public String getRoot() {
-        return "ryver-fts service";
-    }
-
 }
-

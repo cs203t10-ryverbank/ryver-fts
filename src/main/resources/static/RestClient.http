@@ -1,36 +1,47 @@
-###
-GET http://localhost:8081/
-
-###
-POST http://localhost:8081/login
-Accept: application/json
+### Create new user
+POST http://localhost:8081/customers
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
 
 {
-    "username": "manager_1",
-    "password": "01_manager_01"
+    "full_name":"Mark Tan",
+    "nric":"S8291266I",
+    "phone":"91251234",
+    "address":"27 Jalan Alamak S680234",
+    "username":"bryan",
+    "password":"password",
+    "authorities":"ROLE_USER",
+    "active": true
 }
 
-###
+### Get JWT for user
 POST http://localhost:8081/login
 Accept: application/json
+Authorization: Basic bryan password
+
+### Get JWT for manager
+POST http://localhost:8081/login
+Accept: application/json
+Authorization: Basic manager_1 01_manager_01
+
+### Create account as manager
+#For testing, decode the JWT and replace the "customer_id" field with the decoded uid
+POST http://localhost:8083/
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDIyMzAyNDV9.2RnXwD68UFPUlekC3sM4H-UrSUnm3a97yqqmK6E6DN_3nxuBnHw3BDwlDYECXbeDllLY89gg_vliB1mtPl05pQ
 
 {
-    "username": "analyst_1",
-    "password": "01_analyst_01"
+    "customer_id":4,
+    "balance":0.0,
+    "available_balance":0.0
 }
 
-###
-GET http://localhost:8081/users
+### View own accounts as user
+GET http://localhost:8083/
 Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjIzMDQxM30.JS2q6BKs6wG3YyVeBfw5YqmUE12Qqgc4MN0ZZfuSNxgBXSyNBfeTxoCv0vgcMa-BL_hVD3vTdmQgOzQwnA4sHg
 
-###
-GET http://localhost:8081/users
+### View each account as user
+GET http://localhost:8083/51
 Accept: application/json
-# Token generated with manager account.
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5Njc1Nzh9.IfQ-gfBCyGeR4e0ScrUfIYMXHI2OvGdAyEEmU5Or0cbUUK8UcPYIZs7XX0fqB0_cdI8tqyL_-4CVj-PxzSryzw
-
-###
-GET http://localhost:8081/users
-Accept: application/json
-# Token generated with analyst account.
-Authorization: Bearer ...
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjIzMDQxM30.JS2q6BKs6wG3YyVeBfw5YqmUE12Qqgc4MN0ZZfuSNxgBXSyNBfeTxoCv0vgcMa-BL_hVD3vTdmQgOzQwnA4sHg
