@@ -14,21 +14,10 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyX
     "active": true
 }
 
-### Get JWT for user
-POST http://localhost:8081/login
-Accept: application/json
-Authorization: Basic bryan password
-
-### Get JWT for manager
-POST http://localhost:8081/login
-Accept: application/json
-Authorization: Basic manager_1 01_manager_01
-
 ### Create account as manager
-#For testing, decode the JWT and replace the "customer_id" field with the decoded uid
-POST http://localhost:8083/
+POST http://localhost:8080/accounts
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDIyMzAyNDV9.2RnXwD68UFPUlekC3sM4H-UrSUnm3a97yqqmK6E6DN_3nxuBnHw3BDwlDYECXbeDllLY89gg_vliB1mtPl05pQ
+Authorization: Basic manager_1 01_manager_01
 
 {
     "customer_id":4,
@@ -37,10 +26,11 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyX
 }
 
 ### View own accounts as user
-GET http://localhost:8083/
+GET http://localhost:8080/accounts
 Accept: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjIzMTA5OX0.o5Ob4w7Fuufz7KRE1PBIkN_U7G_wDYquC9zq-XqZoe769BaqL-WyeL1NN_ip4p_RpEKY53NyF1GIa4kdq21eGQ
+Authorization: Basic bryan password
+
 ### View each account as user
-GET http://localhost:8083/51
+GET http://localhost:8080/accounts/51
 Accept: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjIzMTA5OX0.o5Ob4w7Fuufz7KRE1PBIkN_U7G_wDYquC9zq-XqZoe769BaqL-WyeL1NN_ip4p_RpEKY53NyF1GIa4kdq21eGQ
+Authorization: Basic bryan password
