@@ -33,5 +33,13 @@ public class AccountException {
         }
     }
 
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Account has insufficient balance.")
+    public static class AccountInsufficientBalanceException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public AccountInsufficientBalanceException(Long id) {
+            super(String.format("Account with id: %s does not have sufficient balance for this action.", id));
+        }
+    }
 }
 

@@ -43,5 +43,20 @@ public class AccountService {
         }
     }
 
-    
+    public double deductFromAccountBalance(Long id, double amount) {
+        Account account = findById(id);
+        double currentAvailableBalance = account.getAvailableBalance();
+        account.setAvailableBalance(currentAvailableBalance + amount);
+        return account.getAvailableBalance();
+    }
+
+    public double addToAccountBalance(long id, double amount) {
+        Account account = findById(id);
+        double currentAvailableBalance = account.getAvailableBalance();
+        if (amount > currentAvailableBalance) {
+            throw new AccountInsufficientBalanceException(id);
+        }
+        account.setAvailableBalance(currentAvailableBalance - amount);
+        return account.getAvailableBalance();
+    }
 }   

@@ -5,17 +5,27 @@ import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import cs203t10.ryver.fts.account.AccountService;
+
 @Service
 public class TransactionService {
   private TransactionRepository transactionRepository;
+  private AccountService accountService;
 
   @Autowired
-  public TransactionService(TransactionRepository transactionRepository) {
+  public TransactionService(TransactionRepository transactionRepository, AccountService accountService) {
     this.transactionRepository = transactionRepository;
+    this.accountService = accountService;
   }
 
   public Transaction addTransaction(Transaction transaction) {
-    // Acccess account service to update bank balances.
+    double amount = transaction.getAmount();
+    Long receiverId = transaction.getReceiverId();
+    Long senderId = transaction.getSenderId();
+
+    accountService.addToAccountBalance(receiverId, amount);
+    accountService.deductFromAccountBalance(senderId, amount);
+
     return transactionRepository.save(transaction);
   }
 
@@ -32,4 +42,5 @@ public class TransactionService {
     transactionsById.addAll(findBySenderId(id));
     return transactionsById;
   }
+
 }
