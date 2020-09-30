@@ -14,10 +14,20 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyX
     "active": true
 }
 
-### Create account as manager
+### Login to user account
+POST http://localhost:8081/login
+Accept: application/json
+Authorization: Basic bryan password
+
+### Login to manager account
+POST http://localhost:8081/login
+Accept: application/json
+Authorization: Basic manager_1 01_manager_01
+
+### Open account as manager
 POST http://localhost:8080/accounts
 Content-Type: application/json
-Authorization: Basic manager_1 01_manager_01
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDIzMTAyOTN9.IPlI-ab1qVVDc0qzUUfmxJGX9-Bl2CBsnExTdVfBPKp5xPbksf3V0QHJZfcVQJ94j4z7Y_f0LOXVsOQzd3R4cw
 
 {
     "customer_id":4,
@@ -26,11 +36,11 @@ Authorization: Basic manager_1 01_manager_01
 }
 
 ### View own accounts as user
-GET http://localhost:8080/accounts
+GET http://localhost:8083/
 Accept: application/json
-Authorization: Basic bryan password
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
 ### View each account as user
-GET http://localhost:8080/accounts/51
+GET http://localhost:8083/51
 Accept: application/json
-Authorization: Basic bryan password
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
