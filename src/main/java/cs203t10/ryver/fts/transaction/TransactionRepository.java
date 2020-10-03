@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, Long>{
-  List<Transaction> findBySenderId(Long senderId);
-  List<Transaction> findByReceiverId(Long receiverId);
+public interface TransactionRepository extends JpaRepository<Transaction, Integer>{
+  List<Transaction> findBySenderAccountId(Integer senderAccountId);
+  List<Transaction> findByReceiverAccountId(Integer receiverAccountId);
 }

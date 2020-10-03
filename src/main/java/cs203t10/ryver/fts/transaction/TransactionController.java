@@ -24,19 +24,18 @@ public class TransactionController {
   }
 
   @GetMapping("/{accountId}/transactions")
-  public List<Transaction> getTransactionsById(@PathVariable long id) {
+  public List<Transaction> getTransactionsById(@PathVariable Integer id) {
     return transactionService.findById(id);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
-  @PostMapping(value = {"/{senderAccountId}/transactions", "/{recevierAccountId}/transactions"})
+  @PostMapping("/{senderAccountId}/transactions")
   // @PreAuthorize("@accountService.getCustomerId(#senderAccountId) == principal.uid")
   public Transaction addTransaction(
-      @PathVariable Long receiverAccountId,
-      @PathVariable Long senderAccountId,
+      @PathVariable Integer senderAccountId,
       @Valid @RequestBody Transaction transaction) {
+    
 
-    // This should throw error if the transaction results in an illegal state.
     Transaction savedTransaction = transactionService.addTransaction(transaction);
 
     return savedTransaction;

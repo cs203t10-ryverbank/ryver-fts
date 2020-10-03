@@ -33,26 +33,26 @@ public class Account {
 
     @JsonProperty("id")
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long accountId;
+    private Integer accountId;
 
     @JsonProperty("customer_id")
     @NotNull(message = "Customer ID cannot be null")
-    private Long customerId;
+    private Integer customerId;
 
     @JsonProperty("balance")
     @NotNull(message = "Balance cannot be null")
-    private double balance;
+    private Double balance;
 
     @JsonProperty("available_balance")
     @NotNull(message = "Available balance cannot be null")
-    private double availableBalance;
+    private Double availableBalance;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "senderId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "senderAccountId", cascade = CascadeType.ALL)
     private List<Transaction> sentTransactions;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "receiverId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "receiverAccountId", cascade = CascadeType.ALL)
     private List<Transaction> receivedTransactions;
 }
 

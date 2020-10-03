@@ -10,9 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,20 +30,23 @@ import lombok.*;
 @EqualsAndHashCode @ToString
 public class Transaction {
 
+  @JsonProperty("id")
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private Integer id;
   
+  @JsonProperty("from")
   @ManyToOne(targetEntity = Account.class)
   @JoinColumn(name = "sender_account_id", nullable = false)
-  @NotNull(message = "Sender account ID cannot be null")
-  private long senderId;
+  private Account senderAccountId;
 
+  @JsonProperty("to")
   @ManyToOne(targetEntity = Account.class)
   @JoinColumn(name = "receiver_account_id", nullable = false)
-  @NotNull(message = "Receiver account ID cannot be null")
-  private long receiverId;
+  private Account receiverAccountId;
 
+  @JsonProperty("amount")
   @NotNull(message = "Transfer amount cannot be null")
-  private double amount;
+  @DecimalMin(value = "0.01", message = "Transfer amount must be larger than 0")
+  private Double amount;
 
 }

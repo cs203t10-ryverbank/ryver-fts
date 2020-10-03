@@ -25,14 +25,14 @@ public class AccountController {
 
     @GetMapping("/")
     @RolesAllowed("USER")
-    public List<Long> getCustomerAccounts(@AuthenticationPrincipal Long customerId) {
+    public List<Integer> getCustomerAccounts(@AuthenticationPrincipal Integer customerId) {
         return accountService.findAccounts(customerId);
     }
 
     @GetMapping("/{accountId}")
     @RolesAllowed("USER")
-    public Account getAccount(@PathVariable Long accountId, @AuthenticationPrincipal Long customerId) {
-        List<Long> customerAccounts = accountService.findAccounts(customerId);
+    public Account getAccount(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
+        List<Integer> customerAccounts = accountService.findAccounts(customerId);
         if (customerAccounts.indexOf(accountId) == -1) {
             throw new AccountNoAccessException(accountId, customerId);
         }

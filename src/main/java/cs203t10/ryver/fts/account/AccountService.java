@@ -21,18 +21,24 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepo;
 
-    public Account findById(Long id) {
+    public Account findById(Integer id) {
         return accountRepo.findById(id) 
                 .orElseThrow(() -> new AccountNotFoundException(id));
     }
 
-    public List<Long> findAccounts(Long customerId) {
+    public List<Integer> findAccounts(Integer customerId) {
         List<Account> accounts = accountRepo.findByCustomerId(customerId);
-        List<Long> accountIds = new ArrayList<>();
+        List<Integer> accountIds = new ArrayList<>();
         for (Account account : accounts) {
             accountIds.add(account.getAccountId());
         }
         return accountIds;
+    }
+
+    public Integer getCustomerId(Integer accountId) {
+        Account account = accountRepo.findById(accountId) 
+                            .orElseThrow(() -> new AccountNotFoundException(accountId));
+        return account.getCustomerId();
     }
 
     public Account saveAccount(Account account) {
@@ -43,20 +49,19 @@ public class AccountService {
         }
     }
 
-    public double deductFromAccountBalance(Long id, double amount) {
-        Account account = findById(id);
-        double currentAvailableBalance = account.getAvailableBalance();
-        account.setAvailableBalance(currentAvailableBalance + amount);
+    public Double addToAccountBalance(Account account, Double amount) {
+        account.setAvailableBalance(account.getAvailableBalance() + amount);
+        account.setBalance(account.getBalance() + amount);
         return account.getAvailableBalance();
     }
 
-    public double addToAccountBalance(long id, double amount) {
-        Account account = findById(id);
-        double currentAvailableBalance = account.getAvailableBalance();
+    public Double deductFromAccountBalance(Account account, Double amount) {
+        Double currentAvailableBalance = account.getAvailableBalance();
         if (amount > currentAvailableBalance) {
-            throw new AccountInsufficientBalanceException(id);
+            throw new AccountInsufficientBalanceException(account.getAccountId());
         }
         account.setAvailableBalance(currentAvailableBalance - amount);
+        account.setBalance(account.getBalance() - amount);
         return account.getAvailableBalance();
     }
 }   
