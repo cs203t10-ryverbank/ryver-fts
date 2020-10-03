@@ -1,46 +1,46 @@
 ### Create new user
-POST http://localhost:8081/customers
+POST http://localhost:8080/customers
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
+Authorization: Basic manager_1 01_manager_01
 
 {
     "full_name":"Mark Tan",
     "nric":"S8291266I",
     "phone":"91251234",
     "address":"27 Jalan Alamak S680234",
-    "username":"bryan",
+    "username":"rubbish",
     "password":"password",
     "authorities":"ROLE_USER",
     "active": true
 }
 
 ### Login to user account
-POST http://localhost:8081/login
+POST http://localhost:8080/login
 Accept: application/json
 Authorization: Basic bryan password
 
 ### Login to manager account
-POST http://localhost:8081/login
+POST http://localhost:8080/login
 Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
 ### Open account as manager
 POST http://localhost:8080/accounts
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDIzMTAyOTN9.IPlI-ab1qVVDc0qzUUfmxJGX9-Bl2CBsnExTdVfBPKp5xPbksf3V0QHJZfcVQJ94j4z7Y_f0LOXVsOQzd3R4cw
+Authorization: Basic manager_1 01_manager_01
 
 {
     "customer_id":4,
-    "balance":0.0,
+    "balance":"nonsense",
     "available_balance":0.0
 }
 
 ### View own accounts as user
-GET http://localhost:8083/
+GET http://localhost:8080/accounts
 Accept: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
+Authorization: Basic rubbish password
 
 ### View each account as user
-GET http://localhost:8083/51
+GET http://localhost:8080/accounts/71
 Accept: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
+Authorization: Basic bryan password

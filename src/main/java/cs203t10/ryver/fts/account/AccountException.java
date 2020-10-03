@@ -9,7 +9,7 @@ public class AccountException {
     public static class AccountAlreadyExistsException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 
-        public AccountAlreadyExistsException(Long id) {
+        public AccountAlreadyExistsException(Integer id) {
             super(String.format("Account %s already exists", id));
         }
     }
@@ -18,8 +18,18 @@ public class AccountException {
     public static class AccountNotFoundException extends RuntimeException {
         private static final long serialVersionUID = 1L;
 
-        public AccountNotFoundException(Long id) {
+        public AccountNotFoundException(Integer id) {
             super(String.format("Account with id: %s not found", id));
+        }
+
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Customer has no accounts")
+    public static class AccountsNotFoundForCustomerException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public AccountsNotFoundForCustomerException(Integer customerId) {
+            super(String.format("Customer with id: %s has no accounts", customerId));
         }
 
     }
@@ -28,7 +38,7 @@ public class AccountException {
     public static class AccountNoAccessException extends RuntimeException {
         private static final long serialVersionUID = 1L;
 
-        public AccountNoAccessException(Long accountId, Long customerId) {
+        public AccountNoAccessException(Integer accountId, Integer customerId) {
             super(String.format("Account with id: %s does not belong to customer with id: %s", accountId, customerId));
         }
     }
@@ -37,7 +47,7 @@ public class AccountException {
     public static class AccountInsufficientBalanceException extends RuntimeException {
         private static final long serialVersionUID = 1L;
 
-        public AccountInsufficientBalanceException(Long id) {
+        public AccountInsufficientBalanceException(Integer id) {
             super(String.format("Account with id: %s does not have sufficient balance for this action.", id));
         }
     }

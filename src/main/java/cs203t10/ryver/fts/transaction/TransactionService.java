@@ -20,8 +20,8 @@ public class TransactionService {
 
   public Transaction addTransaction(Transaction transaction) {
     double amount = transaction.getAmount();
-    Long receiverId = transaction.getReceiverId();
-    Long senderId = transaction.getSenderId();
+    Integer receiverId = transaction.getReceiverId();
+    Integer senderId = transaction.getSenderId();
 
     accountService.addToAccountBalance(receiverId, amount);
     accountService.deductFromAccountBalance(senderId, amount);
@@ -29,15 +29,15 @@ public class TransactionService {
     return transactionRepository.save(transaction);
   }
 
-  public List<Transaction> findByReceiverId(Long id) {
+  public List<Transaction> findByReceiverId(Integer id) {
     return transactionRepository.findByReceiverId(id);
   }
 
-  public List<Transaction> findBySenderId(Long id) {
+  public List<Transaction> findBySenderId(Integer id) {
     return transactionRepository.findBySenderId(id);
   }
 
-  public List<Transaction> findById(long id) {
+  public List<Transaction> findById(Integer id) {
     List<Transaction> transactionsById = new ArrayList<Transaction>(findByReceiverId(id));
     transactionsById.addAll(findBySenderId(id));
     return transactionsById;

@@ -28,17 +28,17 @@ import lombok.*;
 public class Transaction {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private Integer id;
   
   @ManyToOne(targetEntity = Account.class)
   @JoinColumn(name = "sender_account_id", nullable = false)
   @NotNull(message = "Sender account ID cannot be null")
-  private long senderId;
+  private Integer senderId;
 
   @ManyToOne(targetEntity = Account.class)
   @JoinColumn(name = "receiver_account_id", nullable = false)
   @NotNull(message = "Receiver account ID cannot be null")
-  private long receiverId;
+  private Integer receiverId;
 
   @NotNull(message = "Transfer amount cannot be null")
   private double amount;

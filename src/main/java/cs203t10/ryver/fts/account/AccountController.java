@@ -1,19 +1,14 @@
 package cs203t10.ryver.fts.account;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
-import com.auth0.jwt.JWT;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import static cs203t10.ryver.fts.account.AccountException.*;
 
@@ -25,15 +20,16 @@ public class AccountController {
 
     @GetMapping("/")
     @RolesAllowed("USER")
-    public List<Long> getCustomerAccounts(@AuthenticationPrincipal Long customerId) {
+    public List<Account> getCustomerAccounts(@AuthenticationPrincipal Integer customerId) {
         return accountService.findAccounts(customerId);
     }
 
     @GetMapping("/{accountId}")
     @RolesAllowed("USER")
-    public Account getAccount(@PathVariable Long accountId, @AuthenticationPrincipal Long customerId) {
-        List<Long> customerAccounts = accountService.findAccounts(customerId);
-        if (customerAccounts.indexOf(accountId) == -1) {
+    public Account getAccount(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
+        List<Account> customerAccounts = accountService.findAccounts(customerId);
+        Account thisAccount = accountService.findById(accountId);
+        if (customerAccounts.indexOf(thisAccount) == -1) {
             throw new AccountNoAccessException(accountId, customerId);
         }
         return accountService.findById(accountId);
