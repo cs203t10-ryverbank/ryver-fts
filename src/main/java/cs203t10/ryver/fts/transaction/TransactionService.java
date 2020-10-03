@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cs203t10.ryver.fts.account.AccountService;
+import cs203t10.ryver.fts.account.Account;
 
 @Service
 public class TransactionService {
@@ -19,27 +20,28 @@ public class TransactionService {
   }
 
   public Transaction addTransaction(Transaction transaction) {
-    double amount = transaction.getAmount();
-    Integer receiverId = transaction.getReceiverId();
-    Integer senderId = transaction.getSenderId();
+    Double amount = transaction.getAmount();
+    Account receiver = transaction.getReceiverAccountId();
+    Account sender = transaction.getSenderAccountId();
 
-    accountService.addToAccountBalance(receiverId, amount);
-    accountService.deductFromAccountBalance(senderId, amount);
+    accountService.deductFromAccountBalance(sender, amount);
+    accountService.addToAccountBalance(receiver, amount);
 
-    return transactionRepository.save(transaction);
+    Transaction savedTransaction = transactionRepository.save(transaction.toBuilder().build());
+    return savedTransaction;
   }
 
-  public List<Transaction> findByReceiverId(Integer id) {
-    return transactionRepository.findByReceiverId(id);
+  public List<Transaction> findByReceiverAccountId(Integer id) {
+    return transactionRepository.findByReceiverAccountId(id);
   }
 
-  public List<Transaction> findBySenderId(Integer id) {
-    return transactionRepository.findBySenderId(id);
+  public List<Transaction> findBySenderAccountId(Integer id) {
+    return transactionRepository.findBySenderAccountId(id);
   }
 
   public List<Transaction> findById(Integer id) {
-    List<Transaction> transactionsById = new ArrayList<Transaction>(findByReceiverId(id));
-    transactionsById.addAll(findBySenderId(id));
+    List<Transaction> transactionsById = new ArrayList<Transaction>(findByReceiverAccountId(id));
+    transactionsById.addAll(findBySenderAccountId(id));
     return transactionsById;
   }
 

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Integer>{
-  List<Transaction> findBySenderId(Integer senderId);
-  List<Transaction> findByReceiverId(Integer receiverId);
+  List<Transaction> findBySenderAccountId(Integer senderAccountId);
+  List<Transaction> findByReceiverAccountId(Integer receiverAccountId);
 }

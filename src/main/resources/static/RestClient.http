@@ -25,22 +25,50 @@ Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
 ### Open account as manager
-POST http://localhost:8080/accounts
+POST http://localhost:8083/
 Content-Type: application/json
 Authorization: Basic manager_1 01_manager_01
 
 {
     "customer_id":4,
-    "balance":"nonsense",
-    "available_balance":0.0
+    "balance":1000.0,
+    "available_balance":500.0
 }
 
 ### View own accounts as user
 GET http://localhost:8080/accounts
 Accept: application/json
-Authorization: Basic rubbish password
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjYwMTU0M30.P7ARrB9Risy5c1LF4LFntkX4atjXcRMGRyk1PDBGa-77uwOOt1DqEvBEPkWQMoVvhxlfCzeTiU9S4rE5RDodKQ
 
-### View each account as user
-GET http://localhost:8080/accounts/71
+### View own account info as user
+GET http://localhost:8083/5
 Accept: application/json
-Authorization: Basic bryan password
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
+
+### View other user's account info as user
+GET http://localhost:8083/51
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
+
+### Make a transaction
+POST http://localhost:8083/3/transactions
+Content-Type: application/json
+Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
+
+{
+    "from":4,
+    "to":3,
+    "amount":400.0
+}
+
+### Make a transaction
+POST http://localhost:8083/3/transactions
+Content-Type: application/json
+Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
+
+{
+    "from":3,
+    "to":2,
+    "amount":5000.0
+}
+

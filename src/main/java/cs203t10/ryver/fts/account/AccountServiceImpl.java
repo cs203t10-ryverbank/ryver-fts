@@ -32,20 +32,19 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    public double deductFromAccountBalance(Integer id, double amount) {
-        Account account = findById(id);
-        double currentAvailableBalance = account.getAvailableBalance();
-        account.setAvailableBalance(currentAvailableBalance + amount);
+    public Double addToAccountBalance(Account account, Double amount) {
+        account.setAvailableBalance(account.getAvailableBalance() + amount);
+        account.setBalance(account.getBalance() + amount);
         return account.getAvailableBalance();
     }
 
-    public double addToAccountBalance(Integer id, double amount) {
-        Account account = findById(id);
-        double currentAvailableBalance = account.getAvailableBalance();
+    public Double deductFromAccountBalance(Account account, Double amount) {
+        Double currentAvailableBalance = account.getAvailableBalance();
         if (amount > currentAvailableBalance) {
-            throw new AccountInsufficientBalanceException(id);
+            throw new AccountInsufficientBalanceException(account.getAccountId());
         }
         account.setAvailableBalance(currentAvailableBalance - amount);
+        account.setBalance(account.getBalance() - amount);
         return account.getAvailableBalance();
     }
 }   
