@@ -25,13 +25,6 @@ public class AccountControllerTest {
         mockMvc.perform(get("/accounts")).andExpect(status().isForbidden());
     }
 
-    // @Test
-    // @WithMockUser
-    // public void getAccountUnauthorized() throws Exception {
-
-    // }
-
-
     @Test
     @WithMockUser(roles = {"USER", "ANALYST"})
     public void createAccountForbidden() throws Exception {

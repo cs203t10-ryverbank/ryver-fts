@@ -6,14 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -33,19 +28,85 @@ public class AccountServiceTest {
     @InjectMocks 
     private AccountServiceImpl accountService;
 
-    /*
-    // Account findById(Integer id);
-    - test throw Accountnotfoundexception
-    - test return correct account
-    // List<Account> findAccounts(Integer customerId);
-    -test list of accounts found
-    -test no accounts found
-    // Account saveAccount(Account account);
-    -test account returned
+    @Test
+    public void saveAccount_NewAccount_ReturnsAccount() {
+        
+        Random rand = new Random();
+        Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
+        Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
-    // double deductFromAccountBalance(Integer id, double amount);
-    // double addToAccountBalance(Integer id, double amount);
-    */
+        Account account = Account.builder()
+            .accountId(testAccountId)
+            .customerId(testCustomerId)
+            .balance(1000.0)
+            .availableBalance(1000.0)
+            .build();
+        
+        when(accounts.save(any(Account.class))).thenReturn(account);
+
+        Account savedAccount = accountService.saveAccount(account);
+
+        assertEquals(account, savedAccount);
+        verify(accounts).save(account);
+
+    }
+
+    @Test 
+    public void deductFromAccountBalance_SufficientBalance_DeductsBothBalance() {
+        Random rand = new Random();
+        Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
+        Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+
+        Account account = Account.builder()
+            .accountId(testAccountId)
+            .customerId(testCustomerId)
+            .balance(1000.0)
+            .availableBalance(500.0)
+            .build();
+        
+        Double remainingAvailableBalance = accountService.deductFromAccountBalance(account, 10.0);
+        assertEquals(490.0, remainingAvailableBalance);
+        assertEquals(490.0, account.getAvailableBalance());
+        assertEquals(990.0, account.getBalance());
+    }
+
+    @Test 
+    public void deductFromAccountBalance_InsufficientBalance_DoesNotDeduct() {
+        Random rand = new Random();
+        Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
+        Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+
+        Account account = Account.builder()
+            .accountId(testAccountId)
+            .customerId(testCustomerId)
+            .balance(1000.0)
+            .availableBalance(10.0)
+            .build();
+        
+        assertThrows(RuntimeException.class,
+            () -> accountService.deductFromAccountBalance(account, 500.0));
+        assertEquals(10.0, account.getAvailableBalance());
+        assertEquals(1000.0, account.getBalance());
+    }
+
+    @Test 
+    public void addToAccountBalance_AnyBalance_AddsBothBalance() {
+        Random rand = new Random();
+        Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
+        Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+
+        Account account = Account.builder()
+            .accountId(testAccountId)
+            .customerId(testCustomerId)
+            .balance(1000.0)
+            .availableBalance(10.50)
+            .build();
+        
+        Double remainingAvailableBalance = accountService.addToAccountBalance(account, 100.30);
+        assertEquals(110.80, remainingAvailableBalance);
+        assertEquals(110.80, account.getAvailableBalance());
+        assertEquals(1100.30, account.getBalance());
+    }
 
     @Test 
     public void findById_InvalidAccountNumber_ThrowsException() {
@@ -80,46 +141,5 @@ public class AccountServiceTest {
         assertEquals(actualMessage, expectedMessage);
         verify(accounts).findByCustomerId(testCustomerId);
     }
-
-    @Test
-    public void saveAccount_NewAccount_ReturnsAccount() {
-        
-        Random rand = new Random();
-        Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
-        Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
-
-        Account account = Account.builder()
-            .accountId(testAccountId)
-            .customerId(testCustomerId)
-            .balance(1000.0)
-            .availableBalance(1000.0)
-            .build();
-        
-        when(accounts.save(any(Account.class))).thenReturn(account);
-
-        Account savedAccount = accountService.saveAccount(account);
-
-        assertEquals(account, savedAccount);
-        verify(accounts).save(account);
-
-    }
-
-    // @Test 
-    // public void deductFromAccountBalance_InsufficientBalance_DoesNotDeduct() {
-    //     Random rand = new Random();
-    //     Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
-    //     Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
-    //     Integer testAccountId2 = rand.nextInt(Integer.MAX_VALUE);
-    //     Integer testCustomerId2 = rand.nextInt(Integer.MAX_VALUE);
-
-    //     Account account = Account.builder()
-    //         .accountId(testAccountId)
-    //         .customerId(testCustomerId)
-    //         .balance(1000.0)
-    //         .availableBalance(1000.0)
-    //         .build();
-        
-    // }
-
 
 }
