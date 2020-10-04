@@ -22,7 +22,7 @@ public class AccountControllerTest {
     @Test
     @WithMockUser(roles = {"ANALYST", "MANAGER"})
     public void getAccountsForbidden() throws Exception {
-        mockMvc.perform(get("/")).andExpect(status().isForbidden());
+        mockMvc.perform(get("/accounts")).andExpect(status().isForbidden());
     }
 
     // @Test
@@ -42,7 +42,7 @@ public class AccountControllerTest {
             .balance(1000.0)
             .availableBalance(1000.0)
             .build();
-        mockMvc.perform(post("/")
+        mockMvc.perform(post("/accounts")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(account)))
                 .andExpect(status().isForbidden());

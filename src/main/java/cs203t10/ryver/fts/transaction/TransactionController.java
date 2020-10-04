@@ -23,13 +23,13 @@ public class TransactionController {
     this.transactionService = transactionService;
   }
 
-  @GetMapping("/{accountId}/transactions")
+  @GetMapping("/accounts/{accountId}/transactions")
   public List<Transaction> getTransactionsById(@PathVariable Integer id) {
     return transactionService.findById(id);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
-  @PostMapping("/{senderAccountId}/transactions")
+  @PostMapping("/accounts/{senderAccountId}/transactions")
   // @PreAuthorize("@accountService.getCustomerId(#senderAccountId) == principal.uid")
   public Transaction addTransaction(
       @PathVariable Integer senderAccountId,

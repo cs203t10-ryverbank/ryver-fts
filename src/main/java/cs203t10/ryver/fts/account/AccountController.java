@@ -8,6 +8,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import static cs203t10.ryver.fts.account.AccountException.*;
@@ -18,13 +21,14 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/")
+    @GetMapping("/accounts")
     @RolesAllowed("USER")
+    @ApiOperation(value = "View user accounts")
     public List<Account> getCustomerAccounts(@AuthenticationPrincipal Integer customerId) {
         return accountService.findAccounts(customerId);
     }
 
-    @GetMapping("/{accountId}")
+    @GetMapping("/accounts/{accountId}")
     @RolesAllowed("USER")
     public Account getAccount(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
         List<Account> customerAccounts = accountService.findAccounts(customerId);
@@ -36,7 +40,7 @@ public class AccountController {
         
     }
 
-    @PostMapping("/")
+    @PostMapping("/accounts")
     @RolesAllowed("MANAGER")
     @ResponseStatus(HttpStatus.CREATED)
     public Account addAccount(@Valid @RequestBody Account account){

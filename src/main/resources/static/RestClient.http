@@ -25,7 +25,7 @@ Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
 ### Open account as manager
-POST http://localhost:8083/
+POST http://localhost:8080/accounts
 Content-Type: application/json
 Authorization: Basic manager_1 01_manager_01
 
@@ -41,17 +41,17 @@ Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjYwMTU0M30.P7ARrB9Risy5c1LF4LFntkX4atjXcRMGRyk1PDBGa-77uwOOt1DqEvBEPkWQMoVvhxlfCzeTiU9S4rE5RDodKQ
 
 ### View own account info as user
-GET http://localhost:8083/5
+GET http://localhost:8083/accounts/5
 Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
 ### View other user's account info as user
-GET http://localhost:8083/51
+GET http://localhost:8083/accounts/51
 Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
 ### Make a transaction
-POST http://localhost:8083/3/transactions
+POST http://localhost:8083/accounts/3/transactions
 Content-Type: application/json
 Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
@@ -62,7 +62,7 @@ Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsI
 }
 
 ### Make a transaction
-POST http://localhost:8083/3/transactions
+POST http://localhost:8083/accounts/3/transactions
 Content-Type: application/json
 Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
