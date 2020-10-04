@@ -23,13 +23,16 @@ public class AccountController {
 
     @GetMapping("/accounts")
     @RolesAllowed("USER")
-    @ApiOperation(value = "View user accounts")
+    @ApiOperation(value = "Get all information of all accounts for customer",
+            response = Account[].class)
     public List<Account> getCustomerAccounts(@AuthenticationPrincipal Integer customerId) {
         return accountService.findAccounts(customerId);
     }
 
     @GetMapping("/accounts/{accountId}")
     @RolesAllowed("USER")
+    @ApiOperation(value = "Get information of specific account for customer",
+            response = Account.class)
     public Account getAccount(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
         List<Account> customerAccounts = accountService.findAccounts(customerId);
         Account thisAccount = accountService.findById(accountId);
@@ -43,6 +46,8 @@ public class AccountController {
     @PostMapping("/accounts")
     @RolesAllowed("MANAGER")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create an account for customer", 
+            response = Account.class)
     public Account addAccount(@Valid @RequestBody Account account){
         Account savedAccount = accountService.saveAccount(account);
         return savedAccount;
