@@ -1,33 +1,33 @@
 ### Create new user
-POST http://localhost:8081/customers
+POST http://localhost:8080/customers
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
+Authorization: Basic manager_1 01_manager_01
 
 {
     "full_name":"Mark Tan",
     "nric":"S8291266I",
     "phone":"91251234",
     "address":"27 Jalan Alamak S680234",
-    "username":"bryan",
+    "username":"rubbish",
     "password":"password",
     "authorities":"ROLE_USER",
     "active": true
 }
 
 ### Login to user account
-POST http://localhost:8081/login
+POST http://localhost:8080/login
 Accept: application/json
 Authorization: Basic bryan password
 
 ### Login to manager account
-POST http://localhost:8081/login
+POST http://localhost:8080/login
 Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
 ### Open account as manager
-POST http://localhost:8083/
+POST http://localhost:8080/accounts
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDIzMTAyOTN9.IPlI-ab1qVVDc0qzUUfmxJGX9-Bl2CBsnExTdVfBPKp5xPbksf3V0QHJZfcVQJ94j4z7Y_f0LOXVsOQzd3R4cw
+Authorization: Basic manager_1 01_manager_01
 
 {
     "customer_id":4,
@@ -36,22 +36,22 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyX
 }
 
 ### View own accounts as user
-GET http://localhost:8083/
+GET http://localhost:8080/accounts
 Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjYwMTU0M30.P7ARrB9Risy5c1LF4LFntkX4atjXcRMGRyk1PDBGa-77uwOOt1DqEvBEPkWQMoVvhxlfCzeTiU9S4rE5RDodKQ
 
 ### View own account info as user
-GET http://localhost:8083/5
+GET http://localhost:8083/accounts/5
 Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
 ### View other user's account info as user
-GET http://localhost:8083/51
+GET http://localhost:8083/accounts/51
 Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
 ### Make a transaction
-POST http://localhost:8083/3/transactions
+POST http://localhost:8083/accounts/3/transactions
 Content-Type: application/json
 Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
@@ -62,7 +62,7 @@ Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsI
 }
 
 ### Make a transaction
-POST http://localhost:8083/3/transactions
+POST http://localhost:8083/accounts/3/transactions
 Content-Type: application/json
 Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 

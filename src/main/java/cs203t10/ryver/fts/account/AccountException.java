@@ -24,6 +24,16 @@ public class AccountException {
 
     }
 
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Customer has no accounts")
+    public static class AccountsNotFoundForCustomerException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public AccountsNotFoundForCustomerException(Integer customerId) {
+            super(String.format("Customer with id: %s has no accounts", customerId));
+        }
+
+    }
+
     @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Account does not belong to you.")
     public static class AccountNoAccessException extends RuntimeException {
         private static final long serialVersionUID = 1L;

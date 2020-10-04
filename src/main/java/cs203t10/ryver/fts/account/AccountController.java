@@ -1,19 +1,17 @@
 package cs203t10.ryver.fts.account;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
-import com.auth0.jwt.JWT;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+
+import io.swagger.annotations.ApiOperation;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import static cs203t10.ryver.fts.account.AccountException.*;
 
@@ -23,26 +21,33 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/")
+    @GetMapping("/accounts")
     @RolesAllowed("USER")
-    public List<Integer> getCustomerAccounts(@AuthenticationPrincipal Integer customerId) {
+    @ApiOperation(value = "Get all information of all accounts for customer",
+            response = Account[].class)
+    public List<Account> getCustomerAccounts(@AuthenticationPrincipal Integer customerId) {
         return accountService.findAccounts(customerId);
     }
 
-    @GetMapping("/{accountId}")
+    @GetMapping("/accounts/{accountId}")
     @RolesAllowed("USER")
+    @ApiOperation(value = "Get information of specific account for customer",
+            response = Account.class)
     public Account getAccount(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
-        List<Integer> customerAccounts = accountService.findAccounts(customerId);
-        if (customerAccounts.indexOf(accountId) == -1) {
+        List<Account> customerAccounts = accountService.findAccounts(customerId);
+        Account thisAccount = accountService.findById(accountId);
+        if (customerAccounts.indexOf(thisAccount) == -1) {
             throw new AccountNoAccessException(accountId, customerId);
         }
         return accountService.findById(accountId);
         
     }
 
-    @PostMapping("/")
+    @PostMapping("/accounts")
     @RolesAllowed("MANAGER")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create an account for customer", 
+            response = Account.class)
     public Account addAccount(@Valid @RequestBody Account account){
         Account savedAccount = accountService.saveAccount(account);
         return savedAccount;
