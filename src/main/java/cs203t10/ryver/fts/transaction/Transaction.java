@@ -30,21 +30,17 @@ import lombok.*;
 @EqualsAndHashCode @ToString
 public class Transaction {
 
-  @JsonProperty("id")
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  
-  @JsonProperty("from")
-  @ManyToOne(targetEntity = Account.class)
-  @JoinColumn(name = "sender_account_id", nullable = false)
-  private Account senderAccountId;
 
-  @JsonProperty("to")
   @ManyToOne(targetEntity = Account.class)
-  @JoinColumn(name = "receiver_account_id", nullable = false)
-  private Account receiverAccountId;
+  @JoinColumn(name = "sender_account", nullable = false)
+  private Account senderAccount;
 
-  @JsonProperty("amount")
+  @ManyToOne(targetEntity = Account.class)
+  @JoinColumn(name = "receiver_account", nullable = false)
+  private Account receiverAccount;
+
   @NotNull(message = "Transfer amount cannot be null")
   @DecimalMin(value = "0.01", message = "Transfer amount must be larger than 0")
   private Double amount;

@@ -30,7 +30,7 @@ public class AccountControllerTest {
     public void createAccountForbidden() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Account account = Account.builder()
-            .accountId(1)
+            .id(1)
             .customerId(1)
             .balance(1000.0)
             .availableBalance(1000.0)

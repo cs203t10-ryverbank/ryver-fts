@@ -36,7 +36,7 @@ public class AccountServiceTest {
         Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
         Account account = Account.builder()
-            .accountId(testAccountId)
+            .id(testAccountId)
             .customerId(testCustomerId)
             .balance(1000.0)
             .availableBalance(1000.0)
@@ -58,14 +58,13 @@ public class AccountServiceTest {
         Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
         Account account = Account.builder()
-            .accountId(testAccountId)
+            .id(testAccountId)
             .customerId(testCustomerId)
             .balance(1000.0)
             .availableBalance(500.0)
             .build();
         
-        Double remainingAvailableBalance = accountService.deductFromAccountBalance(account, 10.0);
-        assertEquals(490.0, remainingAvailableBalance);
+        Account updatedAccount = accountService.deductFromAccountBalance(testAccountId, 10.0);
         assertEquals(490.0, account.getAvailableBalance());
         assertEquals(990.0, account.getBalance());
     }
@@ -77,14 +76,14 @@ public class AccountServiceTest {
         Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
         Account account = Account.builder()
-            .accountId(testAccountId)
+            .id(testAccountId)
             .customerId(testCustomerId)
             .balance(1000.0)
             .availableBalance(10.0)
             .build();
         
         assertThrows(RuntimeException.class,
-            () -> accountService.deductFromAccountBalance(account, 500.0));
+            () -> accountService.deductFromAccountBalance(testAccountId, 500.0));
         assertEquals(10.0, account.getAvailableBalance());
         assertEquals(1000.0, account.getBalance());
     }
@@ -96,14 +95,13 @@ public class AccountServiceTest {
         Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
         Account account = Account.builder()
-            .accountId(testAccountId)
+            .id(testAccountId)
             .customerId(testCustomerId)
             .balance(1000.0)
             .availableBalance(10.50)
             .build();
         
-        Double remainingAvailableBalance = accountService.addToAccountBalance(account, 100.30);
-        assertEquals(110.80, remainingAvailableBalance);
+        Account updatedAccount = accountService.addToAccountBalance(testAccountId, 100.30);
         assertEquals(110.80, account.getAvailableBalance());
         assertEquals(1100.30, account.getBalance());
     }

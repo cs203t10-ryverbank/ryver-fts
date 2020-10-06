@@ -3,41 +3,52 @@ package cs203t10.ryver.fts.transaction;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import cs203t10.ryver.fts.account.AccountService;
+import cs203t10.ryver.fts.transaction.view.TransactionInfo;
+import cs203t10.ryver.fts.account.AccountException;
 
 @RestController
 public class TransactionController {
+  @Autowired
   private TransactionService transactionService;
 
   @Autowired
-  public TransactionController(TransactionService transactionService) {
-    this.transactionService = transactionService;
-  }
+  private AccountService accountService;
 
   @GetMapping("/accounts/{accountId}/transactions")
-  public List<Transaction> getTransactionsById(@PathVariable Integer id) {
-    return transactionService.findById(id);
+  // @RolesAllowed("USER")
+  public List<Transaction> getTransactionsById(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
+    Integer senderCustomerId = accountService.findCustomerId(accountId);
+    // if (senderCustomerId != customerId) {
+    //   throw new AccountException.AccountNoAccessException(accountId, customerId);
+    // }
+    return transactionService.findBySenderAccountId(accountId);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
-  @PostMapping("/accounts/{senderAccountId}/transactions")
-  // @PreAuthorize("@accountService.getCustomerId(#senderAccountId) == principal.uid")
+  @PostMapping("/accounts/{accountId}/transactions")
+  // @RolesAllowed("USER")
   public Transaction addTransaction(
-      @PathVariable Integer senderAccountId,
-      @Valid @RequestBody Transaction transaction) {
-    
-
-    Transaction savedTransaction = transactionService.addTransaction(transaction);
-
+      @PathVariable Integer accountId, 
+      @Valid @RequestBody TransactionInfo transactionInfo, 
+      @AuthenticationPrincipal Integer customerId) {
+    Integer senderCustomerId = accountService.findCustomerId(accountId);
+    // if (senderCustomerId != customerId) {
+    //   throw new AccountException.AccountNoAccessException(accountId, customerId);
+    // }
+    Transaction savedTransaction = transactionService.addTransaction(
+        transactionInfo.getSenderAccountId(),
+        transactionInfo.getReceiverAccountId(),
+        transactionInfo.getAmount());
     return savedTransaction;
   }
 }

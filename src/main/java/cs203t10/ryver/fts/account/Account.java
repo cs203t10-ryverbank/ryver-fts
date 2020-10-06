@@ -25,8 +25,8 @@ import lombok.*;
 public class Account {
 
     @JsonProperty("id")
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer accountId;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @JsonProperty("customer_id")
     @NotNull(message = "Customer ID cannot be null")
@@ -41,11 +41,11 @@ public class Account {
     private Double availableBalance;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "senderAccountId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "senderAccount", cascade = CascadeType.ALL)
     private List<Transaction> sentTransactions;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "receiverAccountId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "receiverAccount", cascade = CascadeType.ALL)
     private List<Transaction> receivedTransactions;
 }
 

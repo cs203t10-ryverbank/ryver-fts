@@ -30,7 +30,7 @@ public class TransactionServiceTest {
         Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
         Account account = Account.builder()
-            .accountId(testAccountId)
+            .id(testAccountId)
             .customerId(testCustomerId)
             .balance(1000.0)
             .availableBalance(1000.0)
@@ -40,21 +40,21 @@ public class TransactionServiceTest {
         Integer testCustomerId2 = rand.nextInt(Integer.MAX_VALUE);
 
         Account account2 = Account.builder()
-            .accountId(testAccountId2)
+            .id(testAccountId2)
             .customerId(testCustomerId2)
             .balance(1000.0)
             .availableBalance(1000.0)
             .build();
 
         Transaction transaction = Transaction.builder()
-            .senderAccountId(account)
-            .receiverAccountId(account2)
+            .senderAccount(account)
+            .receiverAccount(account2)
             .amount(123.0)
             .build();
         
         when(transactions.save(transaction)).thenReturn(transaction);
         
-        Transaction executedTransaction = transactionService.addTransaction(transaction);
+        Transaction executedTransaction = transactionService.addTransaction(testAccountId, testAccountId2, 123.0);
 
         assertEquals(877.0, account.getBalance());
         assertEquals(877.0, account.getAvailableBalance());

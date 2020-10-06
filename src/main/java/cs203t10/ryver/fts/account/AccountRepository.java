@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer>{
   Optional<List<Account>> findByCustomerId(Integer customerId);
+  Optional<Account> findById(Integer accountId);
 }

@@ -14,9 +14,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepo;
 
-    public Account findById(Integer id) {
-        return accountRepo.findById(id) 
-                .orElseThrow(() -> new AccountNotFoundException(id));
+    public Account findById(Integer accountId) {
+        return accountRepo.findById(accountId) 
+                .orElseThrow(() -> new AccountNotFoundException(accountId));
     }
 
     public List<Account> findAccounts(Integer customerId) {
@@ -26,25 +26,35 @@ public class AccountServiceImpl implements AccountService {
 
     public Account saveAccount(Account account) {
         try {
-            return accountRepo.save(account.toBuilder().build());
+            return accountRepo.save(account);
         } catch (DataIntegrityViolationException e) {
-            throw new AccountAlreadyExistsException(account.getAccountId());
+            throw new AccountAlreadyExistsException(account.getId());
         }
     }
 
-    public Double addToAccountBalance(Account account, Double amount) {
-        account.setAvailableBalance(account.getAvailableBalance() + amount);
-        account.setBalance(account.getBalance() + amount);
-        return account.getAvailableBalance();
+    public Integer findCustomerId(Integer accountId) {
+        Account account = accountRepo.findById(accountId) 
+                .orElseThrow(() -> new AccountNotFoundException(accountId));
+        return account.getCustomerId();
     }
 
-    public Double deductFromAccountBalance(Account account, Double amount) {
-        Double currentAvailableBalance = account.getAvailableBalance();
-        if (amount > currentAvailableBalance) {
-            throw new AccountInsufficientBalanceException(account.getAccountId());
-        }
-        account.setAvailableBalance(currentAvailableBalance - amount);
-        account.setBalance(account.getBalance() - amount);
-        return account.getAvailableBalance();
+    public Account addToAccountBalance(Integer accountId, Double amount) {
+        return accountRepo.findById(accountId).map(account -> {
+            account.setAvailableBalance(account.getAvailableBalance() + amount);
+            account.setBalance(account.getBalance() + amount);
+            return accountRepo.save(account);
+        }).orElseThrow(() -> new AccountNotFoundException(accountId));
+    }
+
+    public Account deductFromAccountBalance(Integer accountId, Double amount) {
+        return accountRepo.findById(accountId).map(account -> {
+            if (amount > account.getAvailableBalance()) {
+                throw new AccountInsufficientBalanceException(accountId);
+            } else {
+                account.setAvailableBalance(account.getAvailableBalance() - amount);
+                account.setBalance(account.getBalance() - amount);
+                return accountRepo.save(account);
+            }
+        }).orElseThrow(() -> new AccountNotFoundException(accountId));
     }
 }   
