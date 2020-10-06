@@ -1,33 +1,33 @@
 ### Create new user
-POST http://localhost:8080/customers
+POST http://localhost:8081/customers
 Content-Type: application/json
-Authorization: Basic manager_1 01_manager_01
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
 
 {
     "full_name":"Mark Tan",
     "nric":"S8291266I",
     "phone":"91251234",
     "address":"27 Jalan Alamak S680234",
-    "username":"rubbish",
+    "username":"bryan",
     "password":"password",
     "authorities":"ROLE_USER",
     "active": true
 }
 
 ### Login to user account
-POST http://localhost:8080/login
+POST http://localhost:8081/login
 Accept: application/json
 Authorization: Basic bryan password
 
 ### Login to manager account
-POST http://localhost:8080/login
+POST http://localhost:8081/login
 Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
 ### Open account as manager
-POST http://localhost:8080/accounts
+POST http://localhost:8083/accounts
 Content-Type: application/json
-Authorization: Basic manager_1 01_manager_01
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDIzMTAyOTN9.IPlI-ab1qVVDc0qzUUfmxJGX9-Bl2CBsnExTdVfBPKp5xPbksf3V0QHJZfcVQJ94j4z7Y_f0LOXVsOQzd3R4cw
 
 {
     "customer_id":4,
@@ -35,13 +35,24 @@ Authorization: Basic manager_1 01_manager_01
     "available_balance":500.0
 }
 
+### Open account as manager
+POST http://localhost:8083/accounts
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDIzMTAyOTN9.IPlI-ab1qVVDc0qzUUfmxJGX9-Bl2CBsnExTdVfBPKp5xPbksf3V0QHJZfcVQJ94j4z7Y_f0LOXVsOQzd3R4cw
+
+{
+    "customer_id":5,
+    "balance":1000.0,
+    "available_balance":500.0
+}
+
 ### View own accounts as user
-GET http://localhost:8080/accounts
+GET http://localhost:8083/accounts
 Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjYwMTU0M30.P7ARrB9Risy5c1LF4LFntkX4atjXcRMGRyk1PDBGa-77uwOOt1DqEvBEPkWQMoVvhxlfCzeTiU9S4rE5RDodKQ
 
 ### View own account info as user
-GET http://localhost:8083/accounts/5
+GET http://localhost:8083/accounts/1
 Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
@@ -51,14 +62,14 @@ Accept: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 
 ### Make a transaction
-POST http://localhost:8083/accounts/3/transactions
+POST http://localhost:8083/accounts/1/transactions
 Content-Type: application/json
-Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
+Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjYwMTU0M30.P7ARrB9Risy5c1LF4LFntkX4atjXcRMGRyk1PDBGa-77uwOOt1DqEvBEPkWQMoVvhxlfCzeTiU9S4rE5RDodKQ
 
 {
-    "from":4,
-    "to":3,
-    "amount":400.0
+    "from":1,
+    "to":2,
+    "amount":50.0
 }
 
 ### Make a transaction
@@ -71,4 +82,9 @@ Authorizatoin: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsI
     "to":2,
     "amount":5000.0
 }
+
+### View transactions on account owned by user
+GET http://localhost:8083/accounts/1/transactions
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMjMxMDE1OH0.GflFHA0yyP3GXM-q0lg8gQcVIyaKVpbjK8dxmDlCGNX-1wBt2HR32OBm6pWEOlfkayXfT3gueks2ckK4mEtTXA
 

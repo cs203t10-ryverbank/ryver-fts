@@ -25,26 +25,26 @@ public class TransactionController {
   private AccountService accountService;
 
   @GetMapping("/accounts/{accountId}/transactions")
-  // @RolesAllowed("USER")
+  @RolesAllowed("USER")
   public List<Transaction> getTransactionsById(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
     Integer senderCustomerId = accountService.findCustomerId(accountId);
-    // if (senderCustomerId != customerId) {
-    //   throw new AccountException.AccountNoAccessException(accountId, customerId);
-    // }
+    if (senderCustomerId != customerId) {
+      throw new AccountException.AccountNoAccessException(accountId, customerId);
+    }
     return transactionService.findBySenderAccountId(accountId);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping("/accounts/{accountId}/transactions")
-  // @RolesAllowed("USER")
+  @RolesAllowed("USER")
   public Transaction addTransaction(
       @PathVariable Integer accountId, 
       @Valid @RequestBody TransactionInfo transactionInfo, 
       @AuthenticationPrincipal Integer customerId) {
     Integer senderCustomerId = accountService.findCustomerId(accountId);
-    // if (senderCustomerId != customerId) {
-    //   throw new AccountException.AccountNoAccessException(accountId, customerId);
-    // }
+    if (senderCustomerId != customerId) {
+      throw new AccountException.AccountNoAccessException(accountId, customerId);
+    }
     Transaction savedTransaction = transactionService.addTransaction(
         transactionInfo.getSenderAccountId(),
         transactionInfo.getReceiverAccountId(),
