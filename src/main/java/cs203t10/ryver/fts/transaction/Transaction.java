@@ -16,6 +16,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,11 +39,14 @@ public class Transaction {
   private Account senderAccount;
 
   @ManyToOne(targetEntity = Account.class)
-  @JoinColumn(name = "receiver_account", nullable = false)
+  @JoinColumn(name = "receiver_account")
   private Account receiverAccount;
 
   @NotNull(message = "Transfer amount cannot be null")
   @DecimalMin(value = "0.01", message = "Transfer amount must be larger than 0")
   private Double amount;
+
+  @JsonIgnore
+  private String status;
 
 }
