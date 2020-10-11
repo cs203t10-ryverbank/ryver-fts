@@ -38,23 +38,40 @@ public class AccountServiceImpl implements AccountService {
         return account.getCustomerId();
     }
 
-    public Account addToAccountBalance(Integer accountId, Double amount) {
+    public Account addToBalance(Integer accountId, Double amount) {
         return accountRepo.findById(accountId).map(account -> {
-            account.setAvailableBalance(account.getAvailableBalance() + amount);
             account.setBalance(account.getBalance() + amount);
             return accountRepo.save(account);
         }).orElseThrow(() -> new AccountNotFoundException(accountId));
     }
 
-    public Account deductFromAccountBalance(Integer accountId, Double amount) {
+    public Account addToAvailableBalance(Integer accountId, Double amount) {
         return accountRepo.findById(accountId).map(account -> {
-            if (amount > account.getAvailableBalance()) {
+            account.setAvailableBalance(account.getAvailableBalance() + amount);
+            return accountRepo.save(account);
+        }).orElseThrow(() -> new AccountNotFoundException(accountId));
+    }
+
+    public Account deductFromBalance(Integer accountId, Double amount) {
+        return accountRepo.findById(accountId).map(account -> {
+            if (amount > account.getBalance()) {
                 throw new AccountInsufficientBalanceException(accountId);
             } else {
-                account.setAvailableBalance(account.getAvailableBalance() - amount);
                 account.setBalance(account.getBalance() - amount);
                 return accountRepo.save(account);
             }
         }).orElseThrow(() -> new AccountNotFoundException(accountId));
     }
+
+    public Account deductFromAvailableBalance(Integer accountId, Double amount) {
+        return accountRepo.findById(accountId).map(account -> {
+            if (amount > account.getAvailableBalance()) {
+                throw new AccountInsufficientBalanceException(accountId);
+            } else {
+                account.setAvailableBalance(account.getAvailableBalance() - amount);
+                return accountRepo.save(account);
+            }
+        }).orElseThrow(() -> new AccountNotFoundException(accountId));
+    }
+
 }   
