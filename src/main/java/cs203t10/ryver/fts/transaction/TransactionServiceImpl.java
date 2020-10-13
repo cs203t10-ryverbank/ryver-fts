@@ -19,11 +19,6 @@ public class TransactionServiceImpl implements TransactionService {
   @Autowired
   private AccountService accountService;
 
-  public Transaction findById(Integer id) {
-    return transactionRepository.findById(id)
-            .orElseThrow(() -> new TransactionNotFoundException(id));
-  }
-
   public Transaction addTransaction(Integer senderAccountId, Integer receiverAccountId, Double amount) {
     accountService.deductFromAvailableBalance(senderAccountId, amount);
     Account senderAccount = accountService.deductFromBalance(senderAccountId, amount);

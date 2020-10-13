@@ -94,13 +94,13 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsI
 
 
 ### Make a transaction
-PUT http://localhost:8083/accounts/7/addAvailableBalance?amount=5000.0
+PUT http://localhost:8083/accounts/7/addAvailableBalance?amount=5000
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6MTcsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MDMyNTUxNDZ9.BzcN2ESFgDTHMcbYk96iu5AR-CYeW2wvtv89tfBYcqr-qIoCZlt2eCxjHbrMNqfTKQPZ7XxtTWo8nSQuMkDnUw
 
 
 ### Make a transaction
-PUT http://localhost:8083/accounts/7/deductBalance?amount=5000.0
+PUT http://localhost:8083/accounts/200/deductBalance?amount=5000.0
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6MTcsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MDMyNTUxNDZ9.BzcN2ESFgDTHMcbYk96iu5AR-CYeW2wvtv89tfBYcqr-qIoCZlt2eCxjHbrMNqfTKQPZ7XxtTWo8nSQuMkDnUw
 
