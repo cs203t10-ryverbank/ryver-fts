@@ -9,7 +9,7 @@
 		<relativePath></relativePath>
 	</parent>
 	<groupId>cs203t10.ryver</groupId>
-	<artifactId>auth</artifactId>
+	<artifactId>fts</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Ryver Bank Fund Transfer Service</name>
 	<description>The fund transfer service for the Ryver Bank API</description>
