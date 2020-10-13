@@ -15,15 +15,5 @@ public class TransactionException {
 
     }
 
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "You cannot modify this transaction.")
-    public static class TransactionNoAccessException extends RuntimeException {
-        private static final long serialVersionUID = 1L;
 
-        public TransactionNoAccessException(Integer id) {
-            super(String.format("Transaction with id: %s not modifiable by the logged-in user", id));
-        }
-    }
-
-    
 }
-
