@@ -62,7 +62,7 @@ public class AccountController {
         @AuthenticationPrincipal Integer customerId) {
       Integer senderCustomerId = accountService.findCustomerId(accountId);
       if (senderCustomerId != customerId) {
-        throw new AccountException.AccountNoAccessException(accountId, customerId);
+        throw new AccountNoAccessException(accountId, customerId);
       }
       Account account = accountService.addToAvailableBalance(accountId, amount);
       return account;
@@ -77,7 +77,7 @@ public class AccountController {
         @AuthenticationPrincipal Integer customerId) {
       Integer senderCustomerId = accountService.findCustomerId(accountId);
       if (senderCustomerId != customerId) {
-        throw new AccountException.AccountNoAccessException(accountId, customerId);
+        throw new AccountNoAccessException(accountId, customerId);
       }
       Account account = accountService.addToBalance(accountId, amount);
       return account;
@@ -92,7 +92,7 @@ public class AccountController {
         @AuthenticationPrincipal Integer customerId) {
       Integer senderCustomerId = accountService.findCustomerId(accountId);
       if (senderCustomerId != customerId) {
-        throw new AccountException.AccountNoAccessException(accountId, customerId);
+        throw new AccountNoAccessException(accountId, customerId);
       }
       Account account = accountService.deductFromAvailableBalance(accountId, amount);
       return account;
@@ -107,7 +107,7 @@ public class AccountController {
         @AuthenticationPrincipal Integer customerId) {
       Integer senderCustomerId = accountService.findCustomerId(accountId);
       if (senderCustomerId != customerId) {
-        throw new AccountException.AccountNoAccessException(accountId, customerId);
+        throw new AccountNoAccessException(accountId, customerId);
       }
       Account account = accountService.deductFromBalance(accountId, amount);
       return account;
