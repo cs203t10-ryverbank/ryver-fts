@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiOperation;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import static cs203t10.ryver.fts.account.AccountException.*;
+import cs203t10.ryver.fts.exception.*;
 
 @RestController
 public class AccountController {

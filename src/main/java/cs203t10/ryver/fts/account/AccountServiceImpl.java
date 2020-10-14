@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import static cs203t10.ryver.fts.account.AccountException.*;
+import cs203t10.ryver.fts.exception.*;
 
 @Service
 public class AccountServiceImpl implements AccountService {

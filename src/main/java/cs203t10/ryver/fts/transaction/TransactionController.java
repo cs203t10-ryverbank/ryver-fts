@@ -14,8 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import cs203t10.ryver.fts.account.AccountService;
 import cs203t10.ryver.fts.transaction.view.*;
-import cs203t10.ryver.fts.account.AccountException;
-import static cs203t10.ryver.fts.transaction.TransactionException.*;
+import cs203t10.ryver.fts.exception.*;
 
 @RestController
 public class TransactionController {
@@ -30,7 +29,7 @@ public class TransactionController {
   public List<Transaction> getTransactionsById(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
     Integer senderCustomerId = accountService.findCustomerId(accountId);
     if (senderCustomerId != customerId) {
-      throw new AccountException.AccountNoAccessException(accountId, customerId);
+      throw new AccountNoAccessException(accountId, customerId);
     }
     return transactionService.findBySenderAccountId(accountId);
   }
@@ -45,7 +44,7 @@ public class TransactionController {
       @AuthenticationPrincipal Integer customerId) {
     Integer senderCustomerId = accountService.findCustomerId(accountId);
     if (senderCustomerId != customerId) {
-      throw new AccountException.AccountNoAccessException(accountId, customerId);
+      throw new AccountNoAccessException(accountId, customerId);
     }
     Transaction savedTransaction = transactionService.addTransaction(
         transactionInfo.getSenderAccountId(),

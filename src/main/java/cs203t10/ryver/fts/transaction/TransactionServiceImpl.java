@@ -9,7 +9,6 @@ import cs203t10.ryver.fts.account.AccountService;
 import cs203t10.ryver.fts.transaction.view.TransactionInfo;
 import cs203t10.ryver.fts.account.Account;
 
-import static cs203t10.ryver.fts.transaction.TransactionException.TransactionNotFoundException;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
