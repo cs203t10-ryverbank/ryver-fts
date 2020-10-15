@@ -1,12 +1,10 @@
 package cs203t10.ryver.fts.transaction;
 
 import java.util.List;
-import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cs203t10.ryver.fts.account.AccountService;
-import cs203t10.ryver.fts.transaction.view.TransactionInfo;
 import cs203t10.ryver.fts.account.Account;
 
 
