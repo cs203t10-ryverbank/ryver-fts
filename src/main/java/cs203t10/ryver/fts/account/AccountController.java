@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiOperation;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import static cs203t10.ryver.fts.account.AccountException.*;
+import cs203t10.ryver.fts.exception.*;
 
 @RestController
 public class AccountController {
@@ -52,4 +52,65 @@ public class AccountController {
         Account savedAccount = accountService.saveAccount(account);
         return savedAccount;
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/accounts/{accountId}/addAvailableBalance")
+    @RolesAllowed("USER")
+    public Account addAvailableBalance(
+        @PathVariable Integer accountId, 
+        @Valid @RequestParam(value = "amount") Double amount, 
+        @AuthenticationPrincipal Integer customerId) {
+      Integer senderCustomerId = accountService.findCustomerId(accountId);
+      if (senderCustomerId != customerId) {
+        throw new AccountNoAccessException(accountId, customerId);
+      }
+      Account account = accountService.addToAvailableBalance(accountId, amount);
+      return account;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/accounts/{accountId}/addBalance")
+    @RolesAllowed("USER")
+    public Account addBalance(
+        @PathVariable Integer accountId, 
+        @Valid @RequestParam(value = "amount") Double amount, 
+        @AuthenticationPrincipal Integer customerId) {
+      Integer senderCustomerId = accountService.findCustomerId(accountId);
+      if (senderCustomerId != customerId) {
+        throw new AccountNoAccessException(accountId, customerId);
+      }
+      Account account = accountService.addToBalance(accountId, amount);
+      return account;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/accounts/{accountId}/deductAvailableBalance")
+    @RolesAllowed("USER")
+    public Account deductAvailableBalance(
+        @PathVariable Integer accountId, 
+        @Valid @RequestParam(value = "amount") Double amount, 
+        @AuthenticationPrincipal Integer customerId) {
+      Integer senderCustomerId = accountService.findCustomerId(accountId);
+      if (senderCustomerId != customerId) {
+        throw new AccountNoAccessException(accountId, customerId);
+      }
+      Account account = accountService.deductFromAvailableBalance(accountId, amount);
+      return account;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/accounts/{accountId}/deductBalance")
+    @RolesAllowed("USER")
+    public Account deductBalance(
+        @PathVariable Integer accountId, 
+        @Valid @RequestParam(value = "amount") Double amount, 
+        @AuthenticationPrincipal Integer customerId) {
+      Integer senderCustomerId = accountService.findCustomerId(accountId);
+      if (senderCustomerId != customerId) {
+        throw new AccountNoAccessException(accountId, customerId);
+      }
+      Account account = accountService.deductFromBalance(accountId, amount);
+      return account;
+    }
+
 }

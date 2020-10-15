@@ -6,6 +6,8 @@ public interface AccountService {
     List<Account> findAccounts(Integer customerId);
     Account saveAccount(Account account);
     Integer findCustomerId(Integer accountId);
-    Account addToAccountBalance(Integer accountId, Double amount);
-    Account deductFromAccountBalance(Integer accountId, Double amount);
+    Account addToBalance(Integer accountId, Double amount);
+    Account addToAvailableBalance(Integer accountId, Double amount);
+    Account deductFromAvailableBalance(Integer accountId, Double amount);
+    Account deductFromBalance(Integer accountId, Double amount);
 }
