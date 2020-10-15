@@ -15,37 +15,41 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cs203t10.ryver.fts.transaction.Transaction;
 
-
 import lombok.*;
 
 @Entity
-@Getter @Setter @Builder(toBuilder = true)
-@AllArgsConstructor @NoArgsConstructor
-@EqualsAndHashCode @ToString
+@Getter
+@Setter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Account {
 
-    @JsonProperty("id")
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@JsonProperty("id")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @JsonProperty("customer_id")
-    @NotNull(message = "Customer ID cannot be null")
-    private Integer customerId;
+	@JsonProperty("customer_id")
+	@NotNull(message = "Customer ID cannot be null")
+	private Integer customerId;
 
-    @JsonProperty("balance")
-    @NotNull(message = "Balance cannot be null")
-    private Double balance;
+	@JsonProperty("balance")
+	@NotNull(message = "Balance cannot be null")
+	private Double balance;
 
-    @JsonProperty("available_balance")
-    @NotNull(message = "Available balance cannot be null")
-    private Double availableBalance;
+	@JsonProperty("available_balance")
+	@NotNull(message = "Available balance cannot be null")
+	private Double availableBalance;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "senderAccount", cascade = CascadeType.ALL)
-    private List<Transaction> sentTransactions;
+	@JsonIgnore
+	@OneToMany(mappedBy = "senderAccount", cascade = CascadeType.ALL)
+	private List<Transaction> sentTransactions;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "receiverAccount", cascade = CascadeType.ALL)
-    private List<Transaction> receivedTransactions;
+	@JsonIgnore
+	@OneToMany(mappedBy = "receiverAccount", cascade = CascadeType.ALL)
+	private List<Transaction> receivedTransactions;
+
 }
-

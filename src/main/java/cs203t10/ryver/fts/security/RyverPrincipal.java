@@ -5,9 +5,8 @@ import lombok.*;
 @AllArgsConstructor
 public class RyverPrincipal {
 
-    public Long uid;
+	public Long uid;
 
-    public String username;
+	public String username;
 
 }
-

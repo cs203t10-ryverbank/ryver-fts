@@ -9,33 +9,30 @@ import cs203t10.ryver.fts.account.AccountService;
 import cs203t10.ryver.fts.transaction.view.TransactionInfo;
 import cs203t10.ryver.fts.account.Account;
 
-
 @Service
 public class TransactionServiceImpl implements TransactionService {
-  @Autowired
-  private TransactionRepository transactionRepository;
 
-  @Autowired
-  private AccountService accountService;
+	@Autowired
+	private TransactionRepository transactionRepository;
 
-  public Transaction addTransaction(Integer senderAccountId, Integer receiverAccountId, Double amount) {
-    accountService.deductFromAvailableBalance(senderAccountId, amount);
-    Account senderAccount = accountService.deductFromBalance(senderAccountId, amount);
-    accountService.addToAvailableBalance(receiverAccountId, amount);
-    Account receiverAccount = accountService.addToBalance(receiverAccountId, amount);
+	@Autowired
+	private AccountService accountService;
 
-    Transaction transaction = Transaction.builder()
-                                  .senderAccount(senderAccount)
-                                  .receiverAccount(receiverAccount)
-                                  .amount(amount)
-                                  .status("accepted")
-                                  .build();
-    return transactionRepository.save(transaction);
-  }
+	public Transaction addTransaction(Integer senderAccountId, Integer receiverAccountId,
+			Double amount) {
+		accountService.deductFromAvailableBalance(senderAccountId, amount);
+		Account senderAccount = accountService.deductFromBalance(senderAccountId, amount);
+		accountService.addToAvailableBalance(receiverAccountId, amount);
+		Account receiverAccount = accountService.addToBalance(receiverAccountId, amount);
 
-  public List<Transaction> findBySenderAccountId(Integer id) {
-    return transactionRepository.findBySenderAccountIdAndStatus(id, "accepted");
-  }
+		Transaction transaction = Transaction.builder().senderAccount(senderAccount)
+				.receiverAccount(receiverAccount).amount(amount).status("accepted")
+				.build();
+		return transactionRepository.save(transaction);
+	}
 
+	public List<Transaction> findBySenderAccountId(Integer id) {
+		return transactionRepository.findBySenderAccountIdAndStatus(id, "accepted");
+	}
 
 }

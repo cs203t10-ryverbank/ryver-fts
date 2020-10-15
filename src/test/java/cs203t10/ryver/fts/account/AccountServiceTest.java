@@ -18,126 +18,123 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceTest {
 
-    @Mock 
-    private AccountRepository accounts;
+	@Mock
+	private AccountRepository accounts;
 
-    @InjectMocks 
-    private AccountServiceImpl accountService;
+	@InjectMocks
+	private AccountServiceImpl accountService;
 
-    @Test
-    public void saveAccount_NewAccount_ReturnsAccount() {
-        
-        Random rand = new Random();
-        Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
-        Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+	@Test
+	public void saveAccount_NewAccount_ReturnsAccount() {
 
-        Account account = Account.builder()
-            .id(testAccountId)
-            .customerId(testCustomerId)
-            .balance(1000.0)
-            .availableBalance(1000.0)
-            .build();
-        
-        when(accounts.save(any(Account.class))).thenReturn(account);
+		Random rand = new Random();
+		Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
+		Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
-        Account savedAccount = accountService.saveAccount(account);
+		Account account = Account.builder().id(testAccountId).customerId(testCustomerId)
+				.balance(1000.0).availableBalance(1000.0).build();
 
-        assertEquals(account, savedAccount);
-        verify(accounts).save(account);
+		when(accounts.save(any(Account.class))).thenReturn(account);
 
-    }
+		Account savedAccount = accountService.saveAccount(account);
 
-    // @Test 
-    // public void deductFromAccountBalance_SufficientBalance_DeductsBothBalance() {
-    //     Random rand = new Random();
-    //     Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
-    //     Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+		assertEquals(account, savedAccount);
+		verify(accounts).save(account);
 
-    //     Account account = Account.builder()
-    //         .id(testAccountId)
-    //         .customerId(testCustomerId)
-    //         .balance(1000.0)
-    //         .availableBalance(500.0)
-    //         .build();
-        
-    //     Account updatedAccount = accountService.deductFromAccountBalance(testAccountId, 10.0);
-    //     assertEquals(490.0, account.getAvailableBalance());
-    //     assertEquals(990.0, account.getBalance());
-    // }
+	}
 
-    // @Test 
-    // public void deductFromAccountBalance_InsufficientBalance_DoesNotDeduct() {
-    //     Random rand = new Random();
-    //     Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
-    //     Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+	// @Test
+	// public void deductFromAccountBalance_SufficientBalance_DeductsBothBalance() {
+	// Random rand = new Random();
+	// Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
+	// Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
-    //     Account account = Account.builder()
-    //         .id(testAccountId)
-    //         .customerId(testCustomerId)
-    //         .balance(1000.0)
-    //         .availableBalance(10.0)
-    //         .build();
-        
-    //     assertThrows(RuntimeException.class,
-    //         () -> accountService.deductFromAccountBalance(testAccountId, 500.0));
-    //     assertEquals(10.0, account.getAvailableBalance());
-    //     assertEquals(1000.0, account.getBalance());
-    // }
+	// Account account = Account.builder()
+	// .id(testAccountId)
+	// .customerId(testCustomerId)
+	// .balance(1000.0)
+	// .availableBalance(500.0)
+	// .build();
 
-    // @Test 
-    // public void addToAccountBalance_AnyBalance_AddsBothBalance() {
-    //     Random rand = new Random();
-    //     Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
-    //     Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+	// Account updatedAccount = accountService.deductFromAccountBalance(testAccountId,
+	// 10.0);
+	// assertEquals(490.0, account.getAvailableBalance());
+	// assertEquals(990.0, account.getBalance());
+	// }
 
-    //     Account account = Account.builder()
-    //         .id(testAccountId)
-    //         .customerId(testCustomerId)
-    //         .balance(1000.0)
-    //         .availableBalance(10.50)
-    //         .build();
-        
-    //     Account updatedAccount = accountService.addToAccountBalance(testAccountId, 100.30);
-    //     assertEquals(110.80, account.getAvailableBalance());
-    //     assertEquals(1100.30, account.getBalance());
-    // }
+	// @Test
+	// public void deductFromAccountBalance_InsufficientBalance_DoesNotDeduct() {
+	// Random rand = new Random();
+	// Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
+	// Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
-    // @Test 
-    // public void findById_InvalidAccountNumber_ThrowsException() {
+	// Account account = Account.builder()
+	// .id(testAccountId)
+	// .customerId(testCustomerId)
+	// .balance(1000.0)
+	// .availableBalance(10.0)
+	// .build();
 
-    //     when(accounts.findById(any(Integer.class))).thenReturn(Optional.empty());
+	// assertThrows(RuntimeException.class,
+	// () -> accountService.deductFromAccountBalance(testAccountId, 500.0));
+	// assertEquals(10.0, account.getAvailableBalance());
+	// assertEquals(1000.0, account.getBalance());
+	// }
 
-    //     Random rand = new Random();
-    //     Integer testId = rand.nextInt(Integer.MAX_VALUE);
+	// @Test
+	// public void addToAccountBalance_AnyBalance_AddsBothBalance() {
+	// Random rand = new Random();
+	// Integer testAccountId = rand.nextInt(Integer.MAX_VALUE);
+	// Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
 
-    //     RuntimeException exception = assertThrows(RuntimeException.class, 
-    //                                     () -> accountService.findById(testId));
+	// Account account = Account.builder()
+	// .id(testAccountId)
+	// .customerId(testCustomerId)
+	// .balance(1000.0)
+	// .availableBalance(10.50)
+	// .build();
 
-    //     String expectedMessage = String.format("Account with id: %s not found", testId);
-    //     String actualMessage = exception.getMessage();
-    //     assertEquals(actualMessage, expectedMessage);
-    //     verify(accounts).findById(testId);
-    // }
+	// Account updatedAccount = accountService.addToAccountBalance(testAccountId, 100.30);
+	// assertEquals(110.80, account.getAvailableBalance());
+	// assertEquals(1100.30, account.getBalance());
+	// }
 
-    // @Test 
-    // public void findAccounts_CustomerNoAccounts_ThrowsException() {
+	// @Test
+	// public void findById_InvalidAccountNumber_ThrowsException() {
 
-    //     when(accounts.findByCustomerId(any(Integer.class))).thenReturn(Optional.empty());
+	// when(accounts.findById(any(Integer.class))).thenReturn(Optional.empty());
 
-    //     Random rand = new Random();
-    //     Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+	// Random rand = new Random();
+	// Integer testId = rand.nextInt(Integer.MAX_VALUE);
 
-    //     RuntimeException exception = assertThrows(RuntimeException.class, 
-    //                                     () -> accountService.findAccounts(testCustomerId));
+	// RuntimeException exception = assertThrows(RuntimeException.class,
+	// () -> accountService.findById(testId));
 
-    //     String expectedMessage = String.format("Customer with id: %s has no accounts", testCustomerId);
-    //     String actualMessage = exception.getMessage();
-    //     assertEquals(actualMessage, expectedMessage);
-    //     verify(accounts).findByCustomerId(testCustomerId);
-    // }
+	// String expectedMessage = String.format("Account with id: %s not found", testId);
+	// String actualMessage = exception.getMessage();
+	// assertEquals(actualMessage, expectedMessage);
+	// verify(accounts).findById(testId);
+	// }
+
+	// @Test
+	// public void findAccounts_CustomerNoAccounts_ThrowsException() {
+
+	// when(accounts.findByCustomerId(any(Integer.class))).thenReturn(Optional.empty());
+
+	// Random rand = new Random();
+	// Integer testCustomerId = rand.nextInt(Integer.MAX_VALUE);
+
+	// RuntimeException exception = assertThrows(RuntimeException.class,
+	// () -> accountService.findAccounts(testCustomerId));
+
+	// String expectedMessage = String.format("Customer with id: %s has no accounts",
+	// testCustomerId);
+	// String actualMessage = exception.getMessage();
+	// assertEquals(actualMessage, expectedMessage);
+	// verify(accounts).findByCustomerId(testCustomerId);
+	// }
 
 }

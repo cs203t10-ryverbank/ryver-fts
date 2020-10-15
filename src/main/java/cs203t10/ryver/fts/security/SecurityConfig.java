@@ -17,62 +17,56 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-    prePostEnabled = true, // Enables @PreAuthorize and @PostAuthorize
-    securedEnabled = true, // Enables @Secured
-    jsr250Enabled = true   // Enables @RolesAllowed
+@EnableGlobalMethodSecurity(prePostEnabled = true, // Enables @PreAuthorize and
+													// @PostAuthorize
+		securedEnabled = true, // Enables @Secured
+		jsr250Enabled = true // Enables @RolesAllowed
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-    /**
-     * Attach the user details and password encoder.
-     */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(userDetailsService)
-            .passwordEncoder(encoder());
-    }
+	/**
+	 * Attach the user details and password encoder.
+	 */
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+	}
 
-    /**
-     * Allow all requests by default, and control access with method security.
-     */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .httpBasic()
-        .and()
-            .cors()
-        .and()
-            .formLogin().disable()
-            .csrf().disable()
-            .headers().disable()
-            .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-            // Disable session creation on Spring Security
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        ;
-    }
+	/**
+	 * Allow all requests by default, and control access with method security.
+	 */
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.httpBasic().and().cors().and().formLogin().disable().csrf().disable()
+				.headers().disable()
+				.addFilter(new JWTAuthorizationFilter(authenticationManager()))
+				// Disable session creation on Spring Security
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		;
+	}
 
-    /**
-     * Bean annotation is used to declare a PasswordEncoder bean in the Spring application context.
-     * Any calls to encoder() will then be intercepted to return the bean instance.
-     */
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        // Auto-generate a random salt internally.
-        return new BCryptPasswordEncoder();
-    }
+	/**
+	 * Bean annotation is used to declare a PasswordEncoder bean in the Spring application
+	 * context. Any calls to encoder() will then be intercepted to return the bean
+	 * instance.
+	 */
+	@Bean
+	public BCryptPasswordEncoder encoder() {
+		// Auto-generate a random salt internally.
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Allow all sources to access this service.
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		// Allow all sources to access this service.
+		source.registerCorsConfiguration("/**",
+				new CorsConfiguration().applyPermitDefaultValues());
+		return source;
+	}
 
 }
-

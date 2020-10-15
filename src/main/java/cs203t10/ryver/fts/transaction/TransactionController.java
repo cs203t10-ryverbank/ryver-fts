@@ -18,40 +18,39 @@ import cs203t10.ryver.fts.exception.*;
 
 @RestController
 public class TransactionController {
-  @Autowired
-  private TransactionService transactionService;
 
-  @Autowired
-  private AccountService accountService;
+	@Autowired
+	private TransactionService transactionService;
 
-  @GetMapping("/accounts/{accountId}/transactions")
-  @RolesAllowed("USER")
-  public List<Transaction> getTransactionsById(@PathVariable Integer accountId, @AuthenticationPrincipal Integer customerId) {
-    Integer senderCustomerId = accountService.findCustomerId(accountId);
-    if (senderCustomerId != customerId) {
-      throw new AccountNoAccessException(accountId, customerId);
-    }
-    return transactionService.findBySenderAccountId(accountId);
-  }
+	@Autowired
+	private AccountService accountService;
 
-  //normal transaction, available balance and balance are deducted immediately
-  @ResponseStatus(HttpStatus.CREATED)
-  @PostMapping("/accounts/{accountId}/transactions")
-  @RolesAllowed("USER")
-  public Transaction addTransaction(
-      @PathVariable Integer accountId, 
-      @Valid @RequestBody TransactionInfo transactionInfo, 
-      @AuthenticationPrincipal Integer customerId) {
-    Integer senderCustomerId = accountService.findCustomerId(accountId);
-    if (senderCustomerId != customerId) {
-      throw new AccountNoAccessException(accountId, customerId);
-    }
-    Transaction savedTransaction = transactionService.addTransaction(
-        transactionInfo.getSenderAccountId(),
-        transactionInfo.getReceiverAccountId(),
-        transactionInfo.getAmount());
-    return savedTransaction;
-  }
+	@GetMapping("/accounts/{accountId}/transactions")
+	@RolesAllowed("USER")
+	public List<Transaction> getTransactionsById(@PathVariable Integer accountId,
+			@AuthenticationPrincipal Integer customerId) {
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		return transactionService.findBySenderAccountId(accountId);
+	}
 
-  
+	// normal transaction, available balance and balance are deducted immediately
+	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping("/accounts/{accountId}/transactions")
+	@RolesAllowed("USER")
+	public Transaction addTransaction(@PathVariable Integer accountId,
+			@Valid @RequestBody TransactionInfo transactionInfo,
+			@AuthenticationPrincipal Integer customerId) {
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Transaction savedTransaction = transactionService.addTransaction(
+				transactionInfo.getSenderAccountId(),
+				transactionInfo.getReceiverAccountId(), transactionInfo.getAmount());
+		return savedTransaction;
+	}
+
 }

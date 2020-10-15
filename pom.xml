@@ -9,7 +9,7 @@
 		<relativePath></relativePath>
 	</parent>
 	<groupId>cs203t10.ryver</groupId>
-	<artifactId>auth</artifactId>
+	<artifactId>fts</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Ryver Bank Fund Transfer Service</name>
 	<description>The fund transfer service for the Ryver Bank API</description>
@@ -112,6 +112,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<version>0.0.6</version>
 			</plugin>
 		</plugins>
 	</build>

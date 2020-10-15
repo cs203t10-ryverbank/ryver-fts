@@ -18,8 +18,9 @@ public class RyverBankFundTransferServiceApplication {
 	}
 
 	@GetMapping("/")
-    @ApiOperation(value = "Check the service name")
-    public String getRoot() {
-        return "ryver-fts service";
-    }
+	@ApiOperation(value = "Check the service name")
+	public String getRoot() {
+		return "ryver-fts service";
+	}
+
 }

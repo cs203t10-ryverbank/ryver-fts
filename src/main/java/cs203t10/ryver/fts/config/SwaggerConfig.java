@@ -27,55 +27,43 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfig {
 
-    @Bean
-    public Docket springfoxDocket() {
-        return new Docket(DocumentationType.SWAGGER_2)
-            .groupName("Ryver FTS")
-            .select()
-            .apis(RequestHandlerSelectors.basePackage("cs203t10.ryver.fts"))
-            .paths(PathSelectors.any())
-            .build()
-            .apiInfo(apiInfo())
-            .securityContexts(securityContexts())
-            .securitySchemes(securitySchemes());
-    }
+	@Bean
+	public Docket springfoxDocket() {
+		return new Docket(DocumentationType.SWAGGER_2).groupName("Ryver FTS").select()
+				.apis(RequestHandlerSelectors.basePackage("cs203t10.ryver.fts"))
+				.paths(PathSelectors.any()).build().apiInfo(apiInfo())
+				.securityContexts(securityContexts()).securitySchemes(securitySchemes());
+	}
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-            .title("Ryver Fund Transfer System (FTS)")
-            .description("The fund transfer service for Ryver Bank API")
-            .version("0.0.1")
-            .build();
-    }
+	private ApiInfo apiInfo() {
+		return new ApiInfoBuilder().title("Ryver Fund Transfer System (FTS)")
+				.description("The fund transfer service for Ryver Bank API")
+				.version("0.0.1").build();
+	}
 
-    private List<SecurityContext> securityContexts() {
-        return Arrays.asList(
-                SecurityContext.builder()
-                    .securityReferences(securityReferences())
-                    .forPaths(PathSelectors.regex("/.+"))
-                    .build());
-    }
+	private List<SecurityContext> securityContexts() {
+		return Arrays
+				.asList(SecurityContext.builder().securityReferences(securityReferences())
+						.forPaths(PathSelectors.regex("/.+")).build());
+	}
 
-    private List<SecurityReference> securityReferences() {
-        return Arrays.asList(basicAuth(), jwtAuth());
-    }
+	private List<SecurityReference> securityReferences() {
+		return Arrays.asList(basicAuth(), jwtAuth());
+	}
 
-    private SecurityReference basicAuth() {
-        return new SecurityReference("basicAuth", new AuthorizationScope[0]);
-    }
+	private SecurityReference basicAuth() {
+		return new SecurityReference("basicAuth", new AuthorizationScope[0]);
+	}
 
-    private SecurityReference jwtAuth() {
-        AuthorizationScope[] authScopes = new AuthorizationScope[1];
-        authScopes[0] = new AuthorizationScope("global", "accessEverything");
-        return new SecurityReference("JWT", authScopes);
-    }
+	private SecurityReference jwtAuth() {
+		AuthorizationScope[] authScopes = new AuthorizationScope[1];
+		authScopes[0] = new AuthorizationScope("global", "accessEverything");
+		return new SecurityReference("JWT", authScopes);
+	}
 
-    private List<SecurityScheme> securitySchemes() {
-        return Arrays.asList(
-            new BasicAuth("basicAuth"),
-            new ApiKey("JWT", "Authorization", "header")
-        );
-    }
+	private List<SecurityScheme> securitySchemes() {
+		return Arrays.asList(new BasicAuth("basicAuth"),
+				new ApiKey("JWT", "Authorization", "header"));
+	}
 
 }
-
