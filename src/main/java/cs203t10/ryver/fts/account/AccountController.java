@@ -108,4 +108,16 @@ public class AccountController {
 		return account;
 	}
 
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/resetAvailableBalance")
+	@RolesAllowed("USER")
+	public Account resetAvailableBalance(@PathVariable Integer accountId,
+			@AuthenticationPrincipal Integer customerId) {
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.resetAvailableBalance(accountId);
+		return account;
+	}
 }

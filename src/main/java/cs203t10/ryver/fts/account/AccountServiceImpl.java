@@ -77,4 +77,11 @@ public class AccountServiceImpl implements AccountService {
 		}).orElseThrow(() -> new AccountNotFoundException(accountId));
 	}
 
+	public Account resetAvailableBalance(Integer accountId) {
+		return accountRepo.findById(accountId).map(account -> {
+			account.setAvailableBalance(account.getBalance());
+			return account;
+		}).orElseThrow(() -> new AccountNotFoundException(accountId));
+	}
+
 }
