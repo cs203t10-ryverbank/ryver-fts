@@ -26,6 +26,8 @@ ROLE_TRADE_SERVICE: deduct from balance of specific account
 /accounts/{accountId}/deductAvailableBalance?amount={amount}
 ROLE_TRADE_SERVICE: deduct from available balance of specific account
 
+/accounts/{accountId}/resetAvailableBalance
+
 ## Response codes
 
 200 OK: add/deduct successful
