@@ -109,10 +109,10 @@ public class AccountController {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@PutMapping("/accounts/{accountId}/resetAvailableBalance")
-	@RolesAllowed("USER")
+	@PutMapping("/accounts/{accountId}/{customerId}/resetAvailableBalance")
+	@RolesAllowed("MARKET")
 	public Account resetAvailableBalance(@PathVariable Integer accountId,
-			@AuthenticationPrincipal Integer customerId) {
+			@PathVariable Integer customerId) {
 		Integer senderCustomerId = accountService.findCustomerId(accountId);
 		if (senderCustomerId != customerId) {
 			throw new AccountNoAccessException(accountId, customerId);
@@ -120,4 +120,61 @@ public class AccountController {
 		Account account = accountService.resetAvailableBalance(accountId);
 		return account;
 	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/{customerId}/addAvailableBalance")
+	@RolesAllowed("MARKET")
+	public Account addAvailableBalanceByMarket(@PathVariable Integer accountId,
+			@Valid @RequestParam(value = "amount") Double amount,
+			@PathVariable Integer customerId) {
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.addToAvailableBalance(accountId, amount);
+		return account;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/{customerId}/deductAvailableBalance")
+	@RolesAllowed("MARKET")
+	public Account deductAvailableBalanceByMarket(@PathVariable Integer accountId,
+			@Valid @RequestParam(value = "amount") Double amount,
+			@PathVariable Integer customerId) {
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.deductFromAvailableBalance(accountId, amount);
+		return account;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/{customerId}/addBalance")
+	@RolesAllowed("MARKET")
+	public Account addBalanceByMarket(@PathVariable Integer accountId,
+			@Valid @RequestParam(value = "amount") Double amount,
+			@PathVariable Integer customerId) {
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.addToBalance(accountId, amount);
+		return account;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/{customerId}/deductBalance")
+	@RolesAllowed("USER")
+	public Account deductBalanceByMarket(@PathVariable Integer accountId,
+			@Valid @RequestParam(value = "amount") Double amount,
+			@PathVariable Integer customerId) {
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.deductFromBalance(accountId, amount);
+		return account;
+	}
+
 }
