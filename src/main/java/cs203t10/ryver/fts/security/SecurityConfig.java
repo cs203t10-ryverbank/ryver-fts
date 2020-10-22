@@ -39,15 +39,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * Allow all requests by default, and control access with method security.
 	 */
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic().and().cors().and().formLogin().disable().csrf().disable()
-				.headers().disable()
-				.addFilter(new JWTAuthorizationFilter(authenticationManager()))
-				// Disable session creation on Spring Security
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		;
-	}
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests().anyRequest().authenticated()
+        .and()
+            .httpBasic()
+        .and()
+            .cors()
+        .and()
+            .formLogin().disable()
+            .csrf().disable()
+            .headers().disable()
+            .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+            // Disable session creation on Spring Security
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        ;
+    }
 
 	/**
 	 * Bean annotation is used to declare a PasswordEncoder bean in the Spring application
