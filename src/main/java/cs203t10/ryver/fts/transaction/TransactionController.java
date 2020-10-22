@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import cs203t10.ryver.fts.account.AccountService;
 import cs203t10.ryver.fts.transaction.view.*;
 import cs203t10.ryver.fts.exception.*;
+import cs203t10.ryver.fts.security.RyverPrincipal;
 
 @RestController
 public class TransactionController {
@@ -27,7 +28,8 @@ public class TransactionController {
 	@GetMapping("/accounts/{accountId}/transactions")
 	@RolesAllowed("USER")
 	public List<Transaction> getTransactionsById(@PathVariable Integer accountId,
-			@AuthenticationPrincipal Integer customerId) {
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
 		Integer senderCustomerId = accountService.findCustomerId(accountId);
 		if (senderCustomerId != customerId) {
 			throw new AccountNoAccessException(accountId, customerId);
@@ -41,7 +43,8 @@ public class TransactionController {
 	@RolesAllowed("USER")
 	public Transaction addTransaction(@PathVariable Integer accountId,
 			@Valid @RequestBody TransactionInfo transactionInfo,
-			@AuthenticationPrincipal Integer customerId) {
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
 		Integer senderCustomerId = accountService.findCustomerId(accountId);
 		if (senderCustomerId != customerId) {
 			throw new AccountNoAccessException(accountId, customerId);

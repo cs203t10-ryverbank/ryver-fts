@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import cs203t10.ryver.fts.exception.*;
+import cs203t10.ryver.fts.security.RyverPrincipal;
 
 @RestController
 public class AccountController {
@@ -25,15 +28,18 @@ public class AccountController {
 	@RolesAllowed("USER")
 	@ApiOperation(value = "Get all information of all accounts for customer", response = Account[].class)
 	public List<Account> getCustomerAccounts(
-			@AuthenticationPrincipal Integer customerId) {
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
 		return accountService.findAccounts(customerId);
 	}
 
 	@GetMapping("/accounts/{accountId}")
-	@RolesAllowed("USER")
+	@RolesAllowed({"USER","MANAGER"})
+	@PreAuthorize("principal.uid != null and (hasRole('ROLE_USER') or hasRole('ROLE_MANAGER'))" )
 	@ApiOperation(value = "Get information of specific account for customer", response = Account.class)
 	public Account getAccount(@PathVariable Integer accountId,
-			@AuthenticationPrincipal Integer customerId) {
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
 		List<Account> customerAccounts = accountService.findAccounts(customerId);
 		Account thisAccount = accountService.findById(accountId);
 		if (customerAccounts.indexOf(thisAccount) == -1) {
@@ -47,7 +53,7 @@ public class AccountController {
 	@RolesAllowed("MANAGER")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Create an account for customer", response = Account.class)
-	public Account addAccount(@Valid @RequestBody Account account) {
+	public Account addAccount(@Valid @RequestBody AccountInitial account) {
 		Account savedAccount = accountService.saveAccount(account);
 		return savedAccount;
 	}
@@ -57,7 +63,8 @@ public class AccountController {
 	@RolesAllowed("USER")
 	public Account addAvailableBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
-			@AuthenticationPrincipal Integer customerId) {
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
 		Integer senderCustomerId = accountService.findCustomerId(accountId);
 		if (senderCustomerId != customerId) {
 			throw new AccountNoAccessException(accountId, customerId);
@@ -71,7 +78,8 @@ public class AccountController {
 	@RolesAllowed("USER")
 	public Account addBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
-			@AuthenticationPrincipal Integer customerId) {
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
 		Integer senderCustomerId = accountService.findCustomerId(accountId);
 		if (senderCustomerId != customerId) {
 			throw new AccountNoAccessException(accountId, customerId);
@@ -85,7 +93,8 @@ public class AccountController {
 	@RolesAllowed("USER")
 	public Account deductAvailableBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
-			@AuthenticationPrincipal Integer customerId) {
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
 		Integer senderCustomerId = accountService.findCustomerId(accountId);
 		if (senderCustomerId != customerId) {
 			throw new AccountNoAccessException(accountId, customerId);
@@ -99,7 +108,8 @@ public class AccountController {
 	@RolesAllowed("USER")
 	public Account deductBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
-			@AuthenticationPrincipal Integer customerId) {
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
 		Integer senderCustomerId = accountService.findCustomerId(accountId);
 		if (senderCustomerId != customerId) {
 			throw new AccountNoAccessException(accountId, customerId);

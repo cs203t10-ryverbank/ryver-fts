@@ -33,6 +33,15 @@ public class AccountServiceImpl implements AccountService {
 		}
 	}
 
+	public Account saveAccount(AccountInitial accountInitial) {
+		try {
+			return accountRepo.save(accountInitial.toAccount());
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new AccountAlreadyExistsException(accountInitial.getId());
+		}
+	}
+
 	public Integer findCustomerId(Integer accountId) {
 		Account account = accountRepo.findById(accountId)
 				.orElseThrow(() -> new AccountNotFoundException(accountId));

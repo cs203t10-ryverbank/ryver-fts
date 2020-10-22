@@ -1,7 +1,6 @@
 package cs203t10.ryver.fts.security;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -24,61 +23,66 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static cs203t10.ryver.fts.security.SecurityConstants.AUTHORITIES_KEY;
 import static cs203t10.ryver.fts.security.SecurityConstants.AUTH_HEADER_KEY;
-import static cs203t10.ryver.fts.security.SecurityConstants.SECRET;
 import static cs203t10.ryver.fts.security.SecurityConstants.BEARER_PREFIX;
+import static cs203t10.ryver.fts.security.SecurityConstants.SECRET;
 import static cs203t10.ryver.fts.security.SecurityConstants.UID_KEY;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-	public JWTAuthorizationFilter(AuthenticationManager authManager) {
-		super(authManager);
-	}
+    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+        super(authManager);
+    }
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request,
-			HttpServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		String header = request.getHeader(AUTH_HEADER_KEY);
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+            HttpServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        String header = request.getHeader(AUTH_HEADER_KEY);
 
-		// If no JWT in the Authorization header, then skip this filter.
-		if (header == null || !header.startsWith(BEARER_PREFIX)) {
-			chain.doFilter(request, response);
-			return;
-		}
+        // If no JWT in the Authorization header, then skip this filter.
+        if (header == null || !header.startsWith(BEARER_PREFIX)) {
+            chain.doFilter(request, response);
+            return;
+        }
 
-		UsernamePasswordAuthenticationToken auth = getAuthentication(request);
+        UsernamePasswordAuthenticationToken auth = getAuthentication(request);
 
-		// If the JWT is valid, set the security context.
-		SecurityContextHolder.getContext().setAuthentication(auth);
+        // If the JWT is valid, set the security context.
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
-		chain.doFilter(request, response);
-	}
+        chain.doFilter(request, response);
+    }
 
-	/**
-	 * Verify the JWT of a request.
-	 * @return An authentication token if the JWT is valid, or null if it is not.
-	 */
-	private UsernamePasswordAuthenticationToken getAuthentication(
-			HttpServletRequest request) {
-		String token = request.getHeader(AUTH_HEADER_KEY);
-		if (token == null) {
-			return null;
-		}
-		DecodedJWT jwt = JWT.require(HMAC512(SECRET.getBytes())).build()
-				.verify(token.replace(BEARER_PREFIX, ""));
+    /**
+     * Verify the JWT of a request.
+     * @return An authentication token if the JWT is valid, or null if it is not.
+     */
+    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+        String token = request.getHeader(AUTH_HEADER_KEY);
+        if (token == null) {
+            return null;
+        }
+        DecodedJWT jwt = JWT.require(HMAC512(SECRET.getBytes()))
+                .build()
+                .verify(token.replace(BEARER_PREFIX, ""));
 
-		// Extract the username (subject) from the JWT.
-		final Integer uid = jwt.getClaim(UID_KEY).asInt();
-		if (uid == null) {
-			return null;
-		}
-		// Extract the authorities from the JWT.
-		final Collection<? extends GrantedAuthority> authorities = Arrays
-				.stream(jwt.getClaim(AUTHORITIES_KEY).asString().split(","))
-				.map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        // Extract the username (subject) and uid from the JWT.
+        final Long uid = jwt.getClaim(UID_KEY).asLong();
+        final String username = jwt.getSubject();
+        if (username == null || uid == null) {
+            return null;
+        }
 
-		// Set the UID as the principal of the auth token.
-		return new UsernamePasswordAuthenticationToken(uid, null, authorities);
-	}
+        RyverPrincipal principal = new RyverPrincipal(uid, username);
+
+        // Extract the authorities from the JWT.
+        final Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(jwt.getClaim(AUTHORITIES_KEY).asString().split(","))
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
+        // Set the principal of the auth token.
+        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+    }
 
 }

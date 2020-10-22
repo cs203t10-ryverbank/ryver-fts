@@ -16,6 +16,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
 
 eureka:
   client:

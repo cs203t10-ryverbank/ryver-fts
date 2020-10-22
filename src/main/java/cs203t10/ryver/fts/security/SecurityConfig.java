@@ -17,10 +17,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, // Enables @PreAuthorize and
-													// @PostAuthorize
-		securedEnabled = true, // Enables @Secured
-		jsr250Enabled = true // Enables @RolesAllowed
+@EnableGlobalMethodSecurity(
+	prePostEnabled = true, // Enables @PreAuthorize and @PostAuthorize
+	securedEnabled = true, // Enables @Secured
+	jsr250Enabled = true // Enables @RolesAllowed
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -75,5 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				new CorsConfiguration().applyPermitDefaultValues());
 		return source;
 	}
+
+	
 
 }

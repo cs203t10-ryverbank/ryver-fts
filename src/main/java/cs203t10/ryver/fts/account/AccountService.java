@@ -10,6 +10,8 @@ public interface AccountService {
 
 	Account saveAccount(Account account);
 
+	Account saveAccount(AccountInitial account);
+
 	Integer findCustomerId(Integer accountId);
 
 	Account addToBalance(Integer accountId, Double amount);
