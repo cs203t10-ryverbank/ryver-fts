@@ -175,7 +175,7 @@ public class AccountController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/{customerId}/deductBalance")
-	@RolesAllowed("USER")
+	@RolesAllowed("MARKET")
 	public Account deductBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
