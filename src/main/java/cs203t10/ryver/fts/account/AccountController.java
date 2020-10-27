@@ -188,7 +188,7 @@ public class AccountController {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@PostMapping("/accounts/reset")
+	@PostMapping("/reset")
 	@RolesAllowed("MANAGER")
 	public void resetAccounts() {
 		accountService.resetAccounts();
