@@ -14,6 +14,11 @@ public class AccountServiceImpl implements AccountService {
 	@Autowired
 	private AccountRepository accountRepo;
 
+	@Override
+	public void resetAccounts() {
+		accountRepo.deleteAll();
+	}
+
 	public Account findById(Integer accountId) {
 		return accountRepo.findById(accountId)
 				.orElseThrow(() -> new AccountNotFoundException(accountId));

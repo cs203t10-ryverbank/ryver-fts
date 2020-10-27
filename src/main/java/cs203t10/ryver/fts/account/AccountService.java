@@ -23,4 +23,6 @@ public interface AccountService {
 	Account deductFromBalance(Integer accountId, Double amount);
 
 	Account resetAvailableBalance(Integer accountId);
+
+	void resetAccounts();
 }
