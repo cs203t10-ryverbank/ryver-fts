@@ -48,6 +48,83 @@ public class AccountController {
 
 	}
 
+	@PostMapping("/accounts")
+	@RolesAllowed("MANAGER")
+	@ResponseStatus(HttpStatus.CREATED)
+	@ApiOperation(value = "Create an account for customer", response = Account.class)
+	public Account addAccount(@Valid @RequestBody AccountInitial account) {
+		Account savedAccount = accountService.saveAccount(account);
+		return savedAccount;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/addAvailableBalance")
+	@RolesAllowed("USER")
+	public Account addAvailableBalance(@PathVariable Integer accountId,
+			@Valid @RequestParam(value = "amount") Double amount,
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.addToAvailableBalance(accountId, amount);
+		return account;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/addBalance")
+	@RolesAllowed("USER")
+	public Account addBalance(@PathVariable Integer accountId,
+			@Valid @RequestParam(value = "amount") Double amount,
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.addToBalance(accountId, amount);
+		return account;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/deductAvailableBalance")
+	@RolesAllowed("USER")
+	public Account deductAvailableBalance(@PathVariable Integer accountId,
+			@Valid @RequestParam(value = "amount") Double amount,
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.deductFromAvailableBalance(accountId, amount);
+		return account;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/accounts/{accountId}/deductBalance")
+	@RolesAllowed("USER")
+	public Account deductBalance(@PathVariable Integer accountId,
+			@Valid @RequestParam(value = "amount") Double amount,
+			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer customerId = ryverPrincipal.uid.intValue();
+		Integer senderCustomerId = accountService.findCustomerId(accountId);
+		if (senderCustomerId != customerId) {
+			throw new AccountNoAccessException(accountId, customerId);
+		}
+		Account account = accountService.deductFromBalance(accountId, amount);
+		return account;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/accounts/{customerId}/getTotalBalance")
+	@RolesAllowed("USER")
+	public Double getTotalBalance(@PathVariable Integer customerId, @AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer ryverCustomerId = ryverPrincipal.uid.intValue();
+		return accountService.getTotalBalance(ryverCustomerId);
+	}
+
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/{customerId}/resetAvailableBalance")
 	@RolesAllowed("MARKET")

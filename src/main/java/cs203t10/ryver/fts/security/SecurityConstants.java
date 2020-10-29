@@ -16,4 +16,5 @@ public class SecurityConstants {
 
 	public static final String UID_KEY = "uid";
 
+	public static final String FTS_JWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmdHMiLCJ1aWQiOjAsImF1dGgiOiJST0xFX0ZUUyIsImV4cCI6MTkwMDAwMDAwMDB9.GTpFiYTxqIO2NLcClycrX9a3c_kMvW6Vyw77XDVqhmKoP04ysOryMsvTa1T-OCwoPc86e9GMpGWWKh7QnRF8tg";
 }

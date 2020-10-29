@@ -8,6 +8,8 @@ public interface AccountService {
 
 	List<Account> findAccounts(Integer customerId);
 
+	Double getTotalBalance(Integer customerId);
+
 	Account saveAccount(Account account);
 
 	Account saveAccount(AccountInitial account);
