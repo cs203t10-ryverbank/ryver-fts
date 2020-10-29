@@ -60,6 +60,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/addAvailableBalance")
 	@RolesAllowed("USER")
+	@ApiOperation(value = "Add available balance to account", response = Account.class)
 	public Account addAvailableBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
@@ -75,6 +76,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/addBalance")
 	@RolesAllowed("USER")
+	@ApiOperation(value = "Add balance to account", response = Account.class)
 	public Account addBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
@@ -90,6 +92,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/deductAvailableBalance")
 	@RolesAllowed("USER")
+	@ApiOperation(value = "Deduct available balance from account", response = Account.class)
 	public Account deductAvailableBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
@@ -105,6 +108,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/deductBalance")
 	@RolesAllowed("USER")
+	@ApiOperation(value = "Deduct balance from account", response = Account.class)
 	public Account deductBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
@@ -120,6 +124,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/accounts/{customerId}/getTotalBalance")
 	@RolesAllowed("USER")
+	@ApiOperation(value = "Retrieve total balance from account", response = Account.class)
 	public Double getTotalBalance(@PathVariable Integer customerId, @AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
 		Integer ryverCustomerId = ryverPrincipal.uid.intValue();
 		return accountService.getTotalBalance(ryverCustomerId);

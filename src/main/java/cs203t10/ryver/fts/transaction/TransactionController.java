@@ -16,6 +16,8 @@ import cs203t10.ryver.fts.transaction.view.*;
 import cs203t10.ryver.fts.exception.*;
 import cs203t10.ryver.fts.security.RyverPrincipal;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class TransactionController {
 
@@ -27,6 +29,7 @@ public class TransactionController {
 
 	@GetMapping("/accounts/{accountId}/transactions")
 	@RolesAllowed("USER")
+	@ApiOperation(value = "Get transactions by id")
 	public List<Transaction> getTransactionsById(@PathVariable Integer accountId,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
 		Integer customerId = ryverPrincipal.uid.intValue();
@@ -41,6 +44,7 @@ public class TransactionController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/accounts/{accountId}/transactions")
 	@RolesAllowed("USER")
+	@ApiOperation(value = "Add transaction")
 	public Transaction addTransaction(@PathVariable Integer accountId,
 			@Valid @RequestBody TransactionInfo transactionInfo,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
