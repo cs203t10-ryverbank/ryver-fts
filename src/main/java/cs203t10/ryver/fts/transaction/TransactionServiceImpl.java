@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cs203t10.ryver.fts.account.AccountService;
+import cs203t10.ryver.fts.market.MarketService;
 import cs203t10.ryver.fts.account.Account;
 
 @Service
@@ -15,6 +16,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	private AccountService accountService;
+
+	@Autowired
+	private MarketService marketService;
 
 	public Transaction addTransaction(Integer senderAccountId, Integer receiverAccountId,
 			Double amount) {
@@ -28,6 +32,8 @@ public class TransactionServiceImpl implements TransactionService {
 				.build();
 		Transaction savedTransaction = transactionRepository.save(transaction);
 
+		marketService.addToInitialCapital(receiverAccountId, amount);
+		marketService.deductFromInitialCapital(senderAccountId, amount);
 		return savedTransaction;
 	}
 

@@ -9,4 +9,6 @@ public class RyverPrincipal {
 
 	public String username;
 
+	public String jwt;
+
 }
