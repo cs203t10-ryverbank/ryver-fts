@@ -87,7 +87,7 @@ public class AccountController {
 		Account account = accountService.addToBalance(accountId, amount);
 		return account;
 	}
-
+	
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/deductAvailableBalance")
 	@RolesAllowed("USER")
@@ -116,6 +116,14 @@ public class AccountController {
 		}
 		Account account = accountService.deductFromBalance(accountId, amount);
 		return account;
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/accounts/{customerId}/getTotalBalance")
+	@RolesAllowed("USER")
+	public Double getTotalBalance(@PathVariable Integer customerId, @AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
+		Integer ryverCustomerId = ryverPrincipal.uid.intValue();
+		return accountService.getTotalBalance(ryverCustomerId);
 	}
 
 	@ResponseStatus(HttpStatus.OK)

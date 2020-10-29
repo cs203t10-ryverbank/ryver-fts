@@ -29,6 +29,15 @@ public class AccountServiceImpl implements AccountService {
 				.orElseThrow(() -> new AccountsNotFoundForCustomerException(customerId));
 	}
 
+	public Double getTotalBalance(Integer customerId) {
+		List<Account> customerAccounts = findAccounts(customerId);
+		Double totalBalance = 0.0;
+		for(Account account : customerAccounts) {
+			totalBalance += account.getBalance();
+		}
+		return totalBalance;
+	}
+
 	public Account saveAccount(Account account) {
 		try {
 			return accountRepo.save(account);

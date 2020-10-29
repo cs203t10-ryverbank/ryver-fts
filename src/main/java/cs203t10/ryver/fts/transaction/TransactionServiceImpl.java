@@ -26,7 +26,9 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = Transaction.builder().senderAccount(senderAccount)
 				.receiverAccount(receiverAccount).amount(amount).status("accepted")
 				.build();
-		return transactionRepository.save(transaction);
+		Transaction savedTransaction = transactionRepository.save(transaction);
+
+		return savedTransaction;
 	}
 
 	public List<Transaction> findBySenderAccountId(Integer id) {

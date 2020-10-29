@@ -21,7 +21,7 @@ public class TransactionServiceTest {
 	private TransactionRepository transactions;
 
 	@InjectMocks
-	private TransactionService transactionService;
+	private TransactionServiceImpl transactionService;
 
 	@Test
 	public void addTransaction_ValidTransaction_ChangesAccountBalance() {
