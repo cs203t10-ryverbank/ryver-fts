@@ -7,12 +7,16 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import cs203t10.ryver.fts.exception.*;
+import cs203t10.ryver.fts.market.MarketService;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private AccountRepository accountRepo;
+
+	@Autowired
+	private MarketService marketService;
 
 	@Override
 	public void resetAccounts() {
@@ -30,7 +34,10 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	public Double getTotalBalance(Integer customerId) {
-		List<Account> customerAccounts = findAccounts(customerId);
+		List<Account> customerAccounts = accountRepo.findByCustomerId(customerId).orElse(null);
+		if (customerAccounts == null) {
+			return 0.0;
+		} 
 		Double totalBalance = 0.0;
 		for(Account account : customerAccounts) {
 			totalBalance += account.getBalance();
@@ -40,7 +47,9 @@ public class AccountServiceImpl implements AccountService {
 
 	public Account saveAccount(Account account) {
 		try {
-			return accountRepo.save(account);
+			Account savedAccount = accountRepo.save(account);
+			marketService.addToInitialCapital(savedAccount.getCustomerId(), savedAccount.getBalance());
+			return savedAccount;
 		}
 		catch (DataIntegrityViolationException e) {
 			throw new AccountAlreadyExistsException(account.getId());
@@ -49,7 +58,9 @@ public class AccountServiceImpl implements AccountService {
 
 	public Account saveAccount(AccountInitial accountInitial) {
 		try {
-			return accountRepo.save(accountInitial.toAccount());
+			Account savedAccount = accountRepo.save(accountInitial.toAccount());
+			marketService.addToInitialCapital(savedAccount.getCustomerId(), savedAccount.getBalance());
+			return savedAccount;
 		}
 		catch (DataIntegrityViolationException e) {
 			throw new AccountAlreadyExistsException(accountInitial.getId());

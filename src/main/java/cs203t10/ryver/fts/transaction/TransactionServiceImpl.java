@@ -32,8 +32,8 @@ public class TransactionServiceImpl implements TransactionService {
 				.build();
 		Transaction savedTransaction = transactionRepository.save(transaction);
 
-		marketService.addToInitialCapital(receiverAccountId, amount);
-		marketService.deductFromInitialCapital(senderAccountId, amount);
+		marketService.addToInitialCapital(receiverAccount.getCustomerId(), amount);
+		marketService.deductFromInitialCapital(senderAccount.getCustomerId(), amount);
 		return savedTransaction;
 	}
 

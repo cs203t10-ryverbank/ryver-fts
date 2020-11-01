@@ -123,7 +123,7 @@ public class AccountController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/accounts/{customerId}/getTotalBalance")
-	@RolesAllowed("USER")
+	@RolesAllowed({"USER", "MANAGER"})
 	@ApiOperation(value = "Retrieve total balance from account", response = Account.class)
 	public Double getTotalBalance(@PathVariable Integer customerId, @AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
 		Integer ryverCustomerId = ryverPrincipal.uid.intValue();

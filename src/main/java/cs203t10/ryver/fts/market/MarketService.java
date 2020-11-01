@@ -56,6 +56,7 @@ public class MarketService {
     }
 
     public void addToInitialCapital(Integer customerId, Double amount) {
+        System.out.println("Run");
         String url = getPortfolioUrl();
         HttpEntity<String> req = getUserHttpEntity();
         ResponseEntity<String> response = restTemplate.exchange(url +  "/{customerId}/addToInitialCapital?amount={amount}",
