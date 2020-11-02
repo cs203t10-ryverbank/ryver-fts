@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -13,6 +14,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import cs203t10.ryver.fts.security.SecurityUtils;
@@ -56,17 +58,24 @@ public class MarketService {
     }
 
     public void addToInitialCapital(Integer customerId, Double amount) {
-        System.out.println("Run");
         String url = getPortfolioUrl();
         HttpEntity<String> req = getUserHttpEntity();
-        ResponseEntity<String> response = restTemplate.exchange(url +  "/{customerId}/addToInitialCapital?amount={amount}",
-        HttpMethod.PUT, req, String.class, customerId, amount);
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url +  "/{customerId}/addToInitialCapital?amount={amount}",
+                    HttpMethod.PUT, req, String.class, customerId, amount);
+        } catch (RestClientResponseException e) {
+            System.out.println("Is forbidden? " + (e.getRawStatusCode() == HttpStatus.FORBIDDEN.value()));
+        }
     }
 
     public void deductFromInitialCapital(Integer customerId, Double amount) {
         String url = getPortfolioUrl();
         HttpEntity<String> req = getUserHttpEntity();
-        ResponseEntity<String> response = restTemplate.exchange(url +  "/{customerId}/deductFromInitialCapital?amount={amount}",
-        HttpMethod.PUT, req, String.class, customerId, amount);
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url +  "/{customerId}/deductFromInitialCapital?amount={amount}",
+                    HttpMethod.PUT, req, String.class, customerId, amount);
+        } catch (RestClientResponseException e) {
+            System.out.println("Is forbidden? " + (e.getRawStatusCode() == HttpStatus.FORBIDDEN.value()));
+        }
     }
 }
