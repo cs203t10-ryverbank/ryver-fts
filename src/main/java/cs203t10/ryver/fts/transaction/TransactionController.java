@@ -41,7 +41,9 @@ public class TransactionController {
 		return transactionService.findBySenderAccountId(accountId);
 	}
 
-	// normal transaction, available balance and balance are deducted immediately
+	/*
+     * A normal transaction, available balance and balance are deducted immediately.
+     */
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/accounts/{accountId}/transactions")
 	@RolesAllowed("USER")
@@ -49,14 +51,15 @@ public class TransactionController {
 	public Transaction addTransaction(@PathVariable Integer accountId,
 			@Valid @RequestBody TransactionInfo transactionInfo,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer customerId = ryverPrincipal.uid.intValue();
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
-			throw new AccountNoAccessException(accountId, customerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!requesterId.equals(ownerOfAccountId)) {
+			throw new AccountNoAccessException(accountId, requesterId);
 		}
 		Transaction savedTransaction = transactionService.addTransaction(
 				transactionInfo.getSenderAccountId(),
-				transactionInfo.getReceiverAccountId(), transactionInfo.getAmount());
+				transactionInfo.getReceiverAccountId(),
+                transactionInfo.getAmount());
 		return savedTransaction;
 	}
 
