@@ -34,7 +34,6 @@ public class TransactionController {
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
 		Integer requesterId = ryverPrincipal.uid.intValue();
 		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
-        System.out.println("CUSTOMER ID FROM JWT: " + requesterId + ", CUSTOMER ID FROM ACCOUNT ID: " + ownerOfAccountId);
 		if (!requesterId.equals(ownerOfAccountId)) {
 			throw new AccountNoAccessException(accountId, requesterId);
 		}
