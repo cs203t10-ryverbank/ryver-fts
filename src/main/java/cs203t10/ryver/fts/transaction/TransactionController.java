@@ -29,13 +29,14 @@ public class TransactionController {
 
 	@GetMapping("/accounts/{accountId}/transactions")
 	@RolesAllowed("USER")
-	@ApiOperation(value = "Get transactions by id")
+	@ApiOperation(value = "Get transactions by account id")
 	public List<Transaction> getTransactionsById(@PathVariable Integer accountId,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer customerId = ryverPrincipal.uid.intValue();
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
-			throw new AccountNoAccessException(accountId, customerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+        System.out.println("CUSTOMER ID FROM JWT: " + requesterId + ", CUSTOMER ID FROM ACCOUNT ID: " + ownerOfAccountId);
+		if (!requesterId.equals(ownerOfAccountId)) {
+			throw new AccountNoAccessException(accountId, requesterId);
 		}
 		return transactionService.findBySenderAccountId(accountId);
 	}
