@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import cs203t10.ryver.fts.auth.AuthService;
 import cs203t10.ryver.fts.exception.*;
 import cs203t10.ryver.fts.market.MarketService;
 
@@ -17,6 +18,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private MarketService marketService;
+
+    @Autowired
+    private AuthService authService;
 
 	@Override
 	public void resetAccounts() {
@@ -37,7 +41,7 @@ public class AccountServiceImpl implements AccountService {
 		List<Account> customerAccounts = accountRepo.findByCustomerId(customerId).orElse(null);
 		if (customerAccounts == null) {
 			return 0.0;
-		} 
+		}
 		Double totalBalance = 0.0;
 		for(Account account : customerAccounts) {
 			totalBalance += account.getBalance();
@@ -56,7 +60,14 @@ public class AccountServiceImpl implements AccountService {
 		}
 	}
 
+    /**
+     * Save a new account, or throw an error if the customer id does not exist.
+     */
 	public Account saveAccount(AccountInitial accountInitial) {
+        int customerId = accountInitial.getCustomerId();
+        if (!authService.customerExists(customerId)) {
+            throw new CustomerAccountDoesNotExist(customerId);
+        }
 		try {
 			Account savedAccount = accountRepo.save(accountInitial.toAccount());
 			marketService.addToInitialCapital(savedAccount.getCustomerId(), savedAccount.getBalance());
