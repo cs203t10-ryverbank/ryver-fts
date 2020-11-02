@@ -28,8 +28,8 @@ public class AccountController {
 	@ApiOperation(value = "Get all information of all accounts for customer", response = Account[].class)
 	public List<Account> getCustomerAccounts(
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer customerId = ryverPrincipal.uid.intValue();
-		return accountService.findAccounts(customerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+		return accountService.findAccounts(requesterId);
 	}
 
 	@GetMapping("/accounts/{accountId}")
@@ -38,13 +38,13 @@ public class AccountController {
 	@ApiOperation(value = "Get information of specific account for customer", response = Account.class)
 	public Account getAccount(@PathVariable Integer accountId,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer customerId = ryverPrincipal.uid.intValue();
-		List<Account> customerAccounts = accountService.findAccounts(customerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+		List<Account> customerAccounts = accountService.findAccounts(requesterId);
 		Account thisAccount = accountService.findById(accountId);
-		if (customerAccounts.indexOf(thisAccount) == -1) {
-			throw new AccountNoAccessException(accountId, customerId);
+		if (!customerAccounts.contains(thisAccount)) {
+			throw new AccountNoAccessException(accountId, requesterId);
 		}
-		return accountService.findById(accountId);
+		return thisAccount;
 
 	}
 
@@ -53,8 +53,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Create an account for customer", response = Account.class)
 	public Account addAccount(@Valid @RequestBody AccountInitial account) {
-		Account savedAccount = accountService.saveAccount(account);
-		return savedAccount;
+		return accountService.saveAccount(account);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -64,13 +63,12 @@ public class AccountController {
 	public Account addAvailableBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer customerId = ryverPrincipal.uid.intValue();
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
-			throw new AccountNoAccessException(accountId, customerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!requesterId.equals(ownerOfAccountId)) {
+			throw new AccountNoAccessException(accountId, requesterId);
 		}
-		Account account = accountService.addToAvailableBalance(accountId, amount);
-		return account;
+		return accountService.addToAvailableBalance(accountId, amount);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -80,13 +78,12 @@ public class AccountController {
 	public Account addBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer customerId = ryverPrincipal.uid.intValue();
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
-			throw new AccountNoAccessException(accountId, customerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!requesterId.equals(ownerOfAccountId)) {
+			throw new AccountNoAccessException(accountId, requesterId);
 		}
-		Account account = accountService.addToBalance(accountId, amount);
-		return account;
+		return accountService.addToBalance(accountId, amount);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -96,13 +93,12 @@ public class AccountController {
 	public Account deductAvailableBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer customerId = ryverPrincipal.uid.intValue();
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
-			throw new AccountNoAccessException(accountId, customerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!requesterId.equals(ownerOfAccountId)) {
+			throw new AccountNoAccessException(accountId, requesterId);
 		}
-		Account account = accountService.deductFromAvailableBalance(accountId, amount);
-		return account;
+		return accountService.deductFromAvailableBalance(accountId, amount);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -112,13 +108,12 @@ public class AccountController {
 	public Account deductBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer customerId = ryverPrincipal.uid.intValue();
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
-			throw new AccountNoAccessException(accountId, customerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!requesterId.equals(ownerOfAccountId)) {
+			throw new AccountNoAccessException(accountId, requesterId);
 		}
-		Account account = accountService.deductFromBalance(accountId, amount);
-		return account;
+		return accountService.deductFromBalance(accountId, amount);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -126,8 +121,11 @@ public class AccountController {
 	@RolesAllowed({"USER", "MANAGER"})
 	@ApiOperation(value = "Retrieve total balance from account", response = Account.class)
 	public Double getTotalBalance(@PathVariable Integer customerId, @AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
-		Integer ryverCustomerId = ryverPrincipal.uid.intValue();
-		return accountService.getTotalBalance(ryverCustomerId);
+		Integer requesterId = ryverPrincipal.uid.intValue();
+        if (!requesterId.equals(customerId)) {
+            throw new CustomerAccountNoAccessException(requesterId, customerId);
+        }
+		return accountService.getTotalBalance(requesterId);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -136,12 +134,11 @@ public class AccountController {
 	@ApiOperation(value = "Reset available balance for a specific account", response = Account.class)
 	public Account resetAvailableBalance(@PathVariable Integer accountId,
 			@PathVariable Integer customerId) {
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!customerId.equals(ownerOfAccountId)) {
 			throw new AccountNoAccessException(accountId, customerId);
 		}
-		Account account = accountService.resetAvailableBalance(accountId);
-		return account;
+		return accountService.resetAvailableBalance(accountId);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -151,12 +148,11 @@ public class AccountController {
 	public Account addAvailableBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!customerId.equals(ownerOfAccountId)) {
 			throw new AccountNoAccessException(accountId, customerId);
 		}
-		Account account = accountService.addToAvailableBalance(accountId, amount);
-		return account;
+		return accountService.addToAvailableBalance(accountId, amount);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -166,12 +162,11 @@ public class AccountController {
 	public Account deductAvailableBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!customerId.equals(ownerOfAccountId)) {
 			throw new AccountNoAccessException(accountId, customerId);
 		}
-		Account account = accountService.deductFromAvailableBalance(accountId, amount);
-		return account;
+		return accountService.deductFromAvailableBalance(accountId, amount);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -181,12 +176,11 @@ public class AccountController {
 	public Account addBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!customerId.equals(ownerOfAccountId)) {
 			throw new AccountNoAccessException(accountId, customerId);
 		}
-		Account account = accountService.addToBalance(accountId, amount);
-		return account;
+		return accountService.addToBalance(accountId, amount);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -196,12 +190,11 @@ public class AccountController {
 	public Account deductBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
-		Integer senderCustomerId = accountService.findCustomerId(accountId);
-		if (senderCustomerId != customerId) {
+		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
+		if (!customerId.equals(ownerOfAccountId)) {
 			throw new AccountNoAccessException(accountId, customerId);
 		}
-		Account account = accountService.deductFromBalance(accountId, amount);
-		return account;
+		return accountService.deductFromBalance(accountId, amount);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
