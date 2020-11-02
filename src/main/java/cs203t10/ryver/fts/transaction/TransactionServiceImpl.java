@@ -38,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	public List<Transaction> findBySenderAccountId(Integer id) {
-		return transactionRepository.findBySenderAccountIdAndStatus(id, "accepted");
+        return transactionRepository.findAllAcceptedByAccountId(id);
 	}
 
 }
