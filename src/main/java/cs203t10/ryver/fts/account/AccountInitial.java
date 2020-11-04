@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cs203t10.ryver.fts.transaction.Transaction;
-
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.*;
 
 @Entity
@@ -25,6 +25,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Hidden
 public class AccountInitial {
 
 	@JsonProperty("id")
