@@ -16,7 +16,10 @@ import cs203t10.ryver.fts.transaction.view.*;
 import cs203t10.ryver.fts.exception.*;
 import cs203t10.ryver.fts.security.RyverPrincipal;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
 
 @RestController
 public class TransactionController {
@@ -29,7 +32,10 @@ public class TransactionController {
 
 	@GetMapping("/accounts/{accountId}/transactions")
 	@RolesAllowed("USER")
-	@ApiOperation(value = "Get transactions by account id")
+	@Operation(summary = "Get transactions by account id")
+    @ApiResponse(responseCode = "200", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = Transaction[].class)))
 	public List<Transaction> getTransactionsById(@PathVariable Integer accountId,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
 		Integer requesterId = ryverPrincipal.uid.intValue();
@@ -46,7 +52,10 @@ public class TransactionController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/accounts/{accountId}/transactions")
 	@RolesAllowed("USER")
-	@ApiOperation(value = "Add transaction")
+	@Operation(summary = "Add transaction")
+    @ApiResponse(responseCode = "201", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = Transaction.class)))
 	public Transaction addTransaction(@PathVariable Integer accountId,
 			@Valid @RequestBody TransactionInfo transactionInfo,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
