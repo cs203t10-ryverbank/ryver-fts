@@ -9,7 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,7 +29,10 @@ public class AccountController {
 
 	@GetMapping("/accounts")
 	@RolesAllowed("USER")
-	@ApiOperation(value = "Get all information of all accounts for customer", response = Account[].class)
+	@Operation(summary = "Get all information of all accounts for customer")
+    @ApiResponse(responseCode = "200", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = Account[].class)))
 	public List<Account> getCustomerAccounts(
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
 		Integer requesterId = ryverPrincipal.uid.intValue();
@@ -35,7 +42,10 @@ public class AccountController {
 	@GetMapping("/accounts/{accountId}")
 	@RolesAllowed({"USER","MANAGER"})
 	@PreAuthorize("principal.uid != null and (hasRole('ROLE_USER') or hasRole('ROLE_MANAGER'))" )
-	@ApiOperation(value = "Get information of specific account for customer", response = Account.class)
+	@Operation(summary = "Get information of specific account for customer")
+    @ApiResponse(responseCode = "200", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = Account.class)))
 	public Account getAccount(@PathVariable Integer accountId,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
 		Integer requesterId = ryverPrincipal.uid.intValue();
@@ -51,7 +61,10 @@ public class AccountController {
 	@PostMapping("/accounts")
 	@RolesAllowed("MANAGER")
 	@ResponseStatus(HttpStatus.CREATED)
-	@ApiOperation(value = "Create an account for customer", response = Account.class)
+	@Operation(summary = "Create an account for customer")
+    @ApiResponse(responseCode = "201", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = Account.class)))
 	public Account addAccount(@Valid @RequestBody AccountInitial account) {
 		return accountService.saveAccount(account);
 	}
@@ -59,7 +72,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/addAvailableBalance")
 	@RolesAllowed("USER")
-	@ApiOperation(value = "Add available balance to account", response = Account.class)
+	@Hidden
 	public Account addAvailableBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
@@ -74,7 +87,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/addBalance")
 	@RolesAllowed("USER")
-	@ApiOperation(value = "Add balance to account", response = Account.class)
+	@Hidden
 	public Account addBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
@@ -89,7 +102,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/deductAvailableBalance")
 	@RolesAllowed("USER")
-	@ApiOperation(value = "Deduct available balance from account", response = Account.class)
+	@Hidden
 	public Account deductAvailableBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
@@ -104,7 +117,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/deductBalance")
 	@RolesAllowed("USER")
-	@ApiOperation(value = "Deduct balance from account", response = Account.class)
+	@Hidden
 	public Account deductBalance(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
@@ -119,7 +132,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/accounts/{customerId}/getTotalBalance")
 	@RolesAllowed({"USER", "MANAGER"})
-	@ApiOperation(value = "Retrieve total balance from account", response = Account.class)
+	@Hidden
 	public Double getTotalBalance(@PathVariable Integer customerId, @AuthenticationPrincipal RyverPrincipal ryverPrincipal) {
 		Integer requesterId = ryverPrincipal.uid.intValue();
         if (!requesterId.equals(customerId)) {
@@ -131,7 +144,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/{customerId}/resetAvailableBalance")
 	@RolesAllowed("MARKET")
-	@ApiOperation(value = "Reset available balance for a specific account", response = Account.class)
+	@Hidden
 	public Account resetAvailableBalance(@PathVariable Integer accountId,
 			@PathVariable Integer customerId) {
 		Integer ownerOfAccountId = accountService.findCustomerId(accountId);
@@ -144,7 +157,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/{customerId}/addAvailableBalance")
 	@RolesAllowed("MARKET")
-	@ApiOperation(value = "Add available balance by Market", response = Account.class)
+	@Hidden
 	public Account addAvailableBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
@@ -158,7 +171,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/{customerId}/deductAvailableBalance")
 	@RolesAllowed("MARKET")
-	@ApiOperation(value = "Deduct available balance by Market", response = Account.class)
+	@Hidden
 	public Account deductAvailableBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
@@ -172,7 +185,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/{customerId}/addBalance")
 	@RolesAllowed("MARKET")
-	@ApiOperation(value = "Add balance by Market", response = Account.class)
+	@Hidden
 	public Account addBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
@@ -186,7 +199,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/accounts/{accountId}/{customerId}/deductBalance")
 	@RolesAllowed("MARKET")
-	@ApiOperation(value = "deduct balance by Market", response = Account.class)
+	@Hidden
 	public Account deductBalanceByMarket(@PathVariable Integer accountId,
 			@Valid @RequestParam(value = "amount") Double amount,
 			@PathVariable Integer customerId) {
@@ -200,7 +213,7 @@ public class AccountController {
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/reset")
 	@RolesAllowed("MANAGER")
-	@ApiOperation(value = "Reset Accounts", response = Account.class)
+	@Hidden
 	public void resetAccounts() {
 		accountService.resetAccounts();
 	}
