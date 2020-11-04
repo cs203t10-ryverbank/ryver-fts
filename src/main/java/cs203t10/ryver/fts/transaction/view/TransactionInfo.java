@@ -2,12 +2,15 @@ package cs203t10.ryver.fts.transaction.view;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 import lombok.*;
 
 @Data
+@Hidden
 public class TransactionInfo {
 
 	@JsonProperty("from")
