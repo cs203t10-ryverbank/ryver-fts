@@ -29,8 +29,7 @@ public class AccountControllerTest {
 	@WithMockUser(roles = { "USER", "ANALYST" })
 	public void createAccountForbidden() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-		Account account = Account.builder().id(1).customerId(1).balance(1000.0)
-				.availableBalance(1000.0).build();
+		AccountInitial account = AccountInitial.builder().id(1).customerId(1).balance(1000.0).build();
 		mockMvc.perform(post("/accounts").contentType("application/json")
 				.content(objectMapper.writeValueAsString(account)))
 				.andExpect(status().isForbidden());

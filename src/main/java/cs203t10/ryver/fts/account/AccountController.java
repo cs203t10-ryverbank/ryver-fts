@@ -40,8 +40,7 @@ public class AccountController {
 	}
 
 	@GetMapping("/accounts/{accountId}")
-	@RolesAllowed({"USER","MANAGER"})
-	@PreAuthorize("principal.uid != null and (hasRole('ROLE_USER') or hasRole('ROLE_MANAGER'))" )
+	@PreAuthorize("principal.uid != null and (hasRole('USER') or hasRole('MANAGER'))")
 	@Operation(summary = "Get information of specific account for customer")
     @ApiResponse(responseCode = "200", 
                 content = @Content(mediaType = "application/json", 
