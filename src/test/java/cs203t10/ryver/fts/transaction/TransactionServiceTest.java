@@ -2,7 +2,6 @@ package cs203t10.ryver.fts.transaction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,12 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import cs203t10.ryver.fts.account.Account;
-import cs203t10.ryver.fts.account.AccountRepository;
-import cs203t10.ryver.fts.account.AccountService;
 import cs203t10.ryver.fts.account.AccountServiceImpl;
 import cs203t10.ryver.fts.market.MarketService;
 
