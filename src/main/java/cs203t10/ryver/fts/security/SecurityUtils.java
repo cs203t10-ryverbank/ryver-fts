@@ -7,15 +7,6 @@ public class SecurityUtils {
 
     private SecurityUtils() { }
 
-    // public static boolean isManagerAuthenticated() {
-    //     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    //     if (auth == null) {
-    //         return false;
-    //     }
-    //     return auth.getAuthorities().stream()
-    //             .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"));
-    // }
-
     public static String getCurrentSessionJWT() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
